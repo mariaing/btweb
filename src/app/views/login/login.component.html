@@ -1,0 +1,42 @@
+<div class="grid-x" style="height: 100%;">
+
+	<div class="login-box-background"></div>
+
+	<div class="cell medium-4 medium-offset-4 login-box grid-x">
+		<div class="cell medium-12">
+			<form>
+				<div class="grid-x" >
+					<div class="small-12 medium-12 large-12">
+						<div class="center-content">
+							<img class="login-box-image " src="assets/images/btlogo.png" alt="" />
+						</div>
+					</div>
+					<div class="medium-10 medium-offset-1">
+						<label>
+							<span style="color: #880E4F">Usuario</span>
+							<input type="text" [(ngModel)]="username" name="name_username" placeholder="Ingrese aqui su usuario">
+						</label>
+					</div>
+					<div class="medium-10 medium-offset-1 cell">
+						<label>
+							<span style="color: #880E4F">Contraseña</span>
+							<input type="password" [(ngModel)]="password" name="name_password" placeholder="Ingrese aqui su Contraseña">
+						</label>
+					</div>
+					<div class="medium-10 medium-offset-1 cell grid-x">
+						<div class="cell medium-offset-9 medium-3">
+							<a class="button small" (click)="loggin()">Iniciar Sesion</a>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class="login-footer grid-x">
+		<div class="cell medium-2 medium-offset-10">
+			<div></div>
+		</div>
+	</div>
+
+</div>

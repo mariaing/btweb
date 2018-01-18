@@ -1,0 +1,129 @@
+<style>
+  td {
+    text-align: center
+  }
+
+  .controls {
+    margin-top: 10px;
+    border: 1px solid transparent;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 32px;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  #pac-input {
+    background-color: #fff;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin-left: 12px;
+    padding: 0 11px 0 13px;
+    text-overflow: ellipsis;
+    width: 300px;
+  }
+
+  #pac-input:focus {
+    border-color: #4d90fe;
+  }
+
+  .pac-container {
+    font-family: Roboto;
+  }
+
+  #type-selector {
+    color: #fff;
+    background-color: #4d90fe;
+    padding: 5px 11px 0px 11px;
+  }
+
+  #type-selector label {
+    font-family: Roboto;
+    font-size: 13px;
+    font-weight: 300;
+  }
+
+  #target {
+    width: 345px;
+  }
+</style>
+
+<div class="grid-x">
+  <div class="medium-3">
+    <p>
+      <button class="button" data-open="exampleModal1">Nueva Empresa</button>
+    </p>
+  </div>
+</div>
+<!--  -->
+<div class="grid-x">
+  <div class="medium-9">
+    <table class="unstriped">
+      <tr>
+        <th>Id</th>
+        <th>Nit</th>
+        <th>Nombre</th>
+        <th>Direccion</th>
+        <th>Telefono</th>
+        <th>Acciones</th>
+      </tr>
+
+      <tr *ngFor="let empresa of empresas">
+        <td>{{ empresa.id }}</td>
+        <td>{{ empresa.nit }}</td>
+        <td>{{ empresa.nombre }}</td>
+        <td>{{ empresa.direccion }}</td>
+        <td>{{ empresa.telefono }}</td>
+        <td style="text-align: center">
+          <i class="material-icons">remove_red_eye</i>
+        </td>
+      </tr>
+    </table>
+  </div>    
+</div>
+
+<div class="reveal" id="exampleModal1" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
+  <h3 style="margin-left: 12px" >Empresa</h3>
+  <div>
+    <form>
+      <div class="grid-container">
+        <div id="formulario" class="grid-x grid-padding-x">
+          <div class="medium-6 cell">
+            <label>Nit
+              <input type="text" placeholder="Digite el nit aqui">
+            </label>
+          </div>
+          <div class="medium-6 cell">
+            <label>Input Label
+              <input type="text" placeholder="Digite el nombre aqui">
+            </label>
+          </div>
+          <div class="medium-6 cell">
+            <label>Direccion
+              <input type="text" placeholder="Digite el nit aqui">
+            </label>
+          </div>
+          <div class="medium-6 cell">
+            <label>Telefono
+              <input type="text" placeholder="Digite el nombre aqui">
+            </label>
+          </div>
+        </div>        
+
+        <app-gmap [width]="542" [height]="300"></app-gmap>
+
+      </div>
+    </form>
+  </div>
+
+  <div>
+    <button class="button small">Click me for another modal!</button>
+  </div>
+
+
+  <button class="close-button" (click)="ajustarMapa()" data-close aria-label="Close modal" type="button">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
