@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EmpresasService } from './../../../services/empresas.service';
 import { MapService } from '../../../services/map.service';
 import { UtilService } from './../../../services/util.service';
+import { GmapComponent } from '../../controls/gmap/gmap.component';
 
 declare var $;
 declare var Foundation;
@@ -14,32 +15,35 @@ declare var google;
 })
 export class EmpresasComponent implements OnInit {
 
+  @ViewChild('mapa') mapaComponent : GmapComponent; 
+
   empresas: any = [];
   modalName: string = "exampleModal1";
   mapName: string = "mapCreateEmpresa";
-  constructor(private empSVC: EmpresasService, private mapSVC: MapService, private util: UtilService) { }
+  constructor(private empSVC: EmpresasService, private mapSVC: MapService, private util: UtilService, ) { 
+    
+  }
 
   ngOnInit() {
     this.empSVC.all().subscribe(s => { this.empresas = s; });
     this.util.initModal(this.modalName);
 
+    
+
     console.log($('#formulario').css('width'));
-    /*    
+     
 
     $('#' + this.modalName).on(
       'open.zf.reveal',
       () => {
         setTimeout(() => {
-          this.mapSVC.initMap(this.mapName);
+          this.mapaComponent.InitMap();
         }, 500);
-      });*/
+      });
   }
 
   ajustarMapa() {
-    console.log($('#formulario').css('width'));
-    //var w = this.mapSVC.GetLocation();
-    //console.log(w.getPosition().lat());
-    //console.log(w.getPosition().lng());
+    console.log("funciona el boton");
   }
 
 }

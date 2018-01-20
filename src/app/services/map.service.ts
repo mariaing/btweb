@@ -11,8 +11,7 @@ export class MapService {
 
   public mapa : HTMLElement;
   public markers: any[] = [];
-  public htmlSearchBox: HTMLElement;
-  public ValleduparCood: any = { center: { lat: 10.4744508, lng: -73.2609084 }, zoom: 14 };
+  public htmlSearchBox: HTMLElement;  
 
   constructor() {
 

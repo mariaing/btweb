@@ -24,8 +24,7 @@
         "assets/styles/foundation.min.css",
         "../node_modules/ng2-toastr/bundles/ng2-toastr.min.css"        
       ],
-      "scripts": [  
-        "assets/scripts/vendor/jquery.js",
+      "scripts": [         
         "assets/scripts/vendor/foundation.min.js",        
         "assets/scripts/vendor/what-input.js",
         "assets/scripts/app.js",
