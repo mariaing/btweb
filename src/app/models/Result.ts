@@ -1,3 +1,5 @@
-class Result<T>{
-    public Data : T;
+export class Result<T>{
+    public IsOk: boolean;
+    public Mensaje: string;
+    public Data: T;
 }

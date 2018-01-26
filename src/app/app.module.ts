@@ -24,6 +24,9 @@ import { ConsultasComponent } from './views/menus/consultas/consultas.component'
 import { EmpresasService } from "./services/empresas.service";
 import { MapService } from './services/map.service';
 import { GmapComponent } from './views/controls/gmap/gmap.component';
+import { FiltroEmpresaPipe } from './pipes/filtro-empresa.pipe';
+import { LoadingComponent } from './views/controls/loading/loading.component';
+import { PhotoUploaderComponent } from './views/controls/photo-uploader/photo-uploader.component';
 /*
 ############################################################
 ##                        route
@@ -47,7 +50,7 @@ const appRoutes: Routes = [
 ]
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, DashboardComponent, AsignacionComponent, EmpresasComponent, EmpleadosComponent, ConsultasComponent, GmapComponent],
+  declarations: [AppComponent, LoginComponent, DashboardComponent, AsignacionComponent, EmpresasComponent, EmpleadosComponent, ConsultasComponent, GmapComponent, FiltroEmpresaPipe, LoadingComponent, PhotoUploaderComponent],
   imports: [  
   HttpClientModule,
     HttpModule,

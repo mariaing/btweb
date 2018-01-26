@@ -11,21 +11,21 @@ import { SideMenu } from './../../models/SideMenu';
 declare var mlPushMenu;
 @Component({
   selector: "app-dashboard",
-  templateUrl: "./dashboard.component.html",
-  styleUrls: ["./dashboard.component.css"]
+  templateUrl: './dashboard.component.html',
+  styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
   usuarios: any;
-  count: number = 0;  
-  menus : SideMenu[] = [];
-  constructor(private usuarioSVC : UsuarioService, public util : UtilService, private menuSVC : MenuService, private auth : AuthService) {}
+  count = 0;
+  menus: SideMenu[] = [];
+  constructor(private usuarioSVC: UsuarioService, public util: UtilService, private menuSVC: MenuService, private auth: AuthService) {}
 
-  ngOnInit() {       
-    this.util.appState = "INICIO";        
+  ngOnInit() {
+    this.util.appState = 'INICIO';
     this.menus = this.menuSVC.getSideMenu(0);
-    console.log(this.menus);
-  }  
+  }
 
-  ButtonClick() {        
-  }  
+  ButtonClick() {
+
+  }
 }

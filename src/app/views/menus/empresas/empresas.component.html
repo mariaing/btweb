@@ -2,7 +2,6 @@
   td {
     text-align: center
   }
-  
 </style>
 
 <div class="grid-x">
@@ -13,7 +12,7 @@
   </div>
 </div>
 <!--  -->
-<div class="grid-x">
+<div class="grid-x" style="max-height: 460px;overflow-y: scroll">
   <div class="medium-9">
     <table class="unstriped">
       <tr>
@@ -25,60 +24,39 @@
         <th>Acciones</th>
       </tr>
 
-      <tr *ngFor="let empresa of empresas">
+      <tr *ngFor="let empresa of empresas | filtroEmpresa:util.filtro">
         <td>{{ empresa.id }}</td>
         <td>{{ empresa.nit }}</td>
         <td>{{ empresa.nombre }}</td>
         <td>{{ empresa.direccion }}</td>
         <td>{{ empresa.telefono }}</td>
         <td style="text-align: center">
-          <i class="material-icons">remove_red_eye</i>
+          <div class="grid-x">
+            <div (click)="MostrarUbicacion(empresa)" class="button-cursor float-center medium-6">
+              <i class="material-icons">remove_red_eye</i>
+            </div>
+            <div (click)="MostrarEditar(empresa)" class="button-cursor float-center medium-6">
+              <i class="material-icons">mode_edit</i>
+            </div>            
+          </div>
         </td>
       </tr>
+
     </table>
-  </div>    
-</div>
-
-<div class="reveal" id="exampleModal1" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
-  <h3 style="margin-left: 12px" >Empresa</h3>
-  <div>
-    <form>
-      <div class="grid-container">
-        <div id="formulario" class="grid-x grid-padding-x">
-          <div class="medium-6 cell">
-            <label>Nit
-              <input type="text" placeholder="Digite el nit aqui">
-            </label>
-          </div>
-          <div class="medium-6 cell">
-            <label>Input Label
-              <input type="text" placeholder="Digite el nombre aqui">
-            </label>
-          </div>
-          <div class="medium-6 cell">
-            <label>Direccion
-              <input type="text" placeholder="Digite el nit aqui">
-            </label>
-          </div>
-          <div class="medium-6 cell">
-            <label>Telefono
-              <input type="text" placeholder="Digite el nombre aqui">
-            </label>
-          </div>
-        </div>        
-
-        <app-gmap #mapa [width]="536" [height]="300"></app-gmap>
-
-      </div>
-    </form>
   </div>
-
-  <div>
-    <button class="button small" (click)="ajustarMapa()">Guardar</button>
-  </div>
-
-  
-  <button class="close-button" data-close aria-label="Close modal" type="button">
-    <span aria-hidden="true">&times;</span>
-  </button>
 </div>
+ 
+
+<div class="reveal small" id="mapModal" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
+  <h3 style="margin-left: 12px">Empresa</h3>
+
+  <div class="grid-x">
+    <div class="medium-12 cell">
+      <label>ubicacion de la empresa </label>
+      <app-gmap #mapa2 [name]="'mapaMostrarUbicacion'" [height]="360" [DisableClickEvent]="true"></app-gmap>
+    </div>
+
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>

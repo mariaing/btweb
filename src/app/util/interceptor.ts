@@ -32,15 +32,19 @@ export class BTInterceptor implements HttpInterceptor {
       }, err => {
         switch (err.status) {
           case 504:
-            this.util.showErrorTitle("Error","servidor fuera de servicio");            
+            this.util.showErrorTitle("Error","Servidor fuera de servicio");
             break;
           case 500:
-            this.util.showError("ocurrio un problema en el servidor.");            
+            this.util.showError("Ocurrio un problema en el servidor.");
             break;
           case 404:
-            console.log("la uri no pudo ser encontrada");
-            break;
+          this.util.showError("La uri no pudo ser encontrada");
+            break;            
+            case 409:
+          this.util.showError("El objeto que desea crear no es valido, posiblemente existe el identificador");
+            break;          
           default:
+          this.util.showError(JSON.stringify(err));                                  
             break;
         }
         if (err.status === 500) {

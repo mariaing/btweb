@@ -2,6 +2,7 @@ import { Component, ViewContainerRef } from '@angular/core';
 import { OnInit } from '@angular/core/src/metadata/lifecycle_hooks';
 import { UtilService } from './services/util.service';
 
+declare var jQuery:any;
 declare var $:any;
 
 @Component({

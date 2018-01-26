@@ -8,8 +8,5 @@ if (environment.production) {
   enableProdMode();
 }
 
-declare var jQuery:any;
-export var jquery = jQuery;
-
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.log(err));

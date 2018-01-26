@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { UtilService } from './util.service';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { Result } from './../models/Result';
 
 @Injectable()
 export class UsuarioService {

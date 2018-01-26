@@ -5,9 +5,9 @@ import {
   Output,
   EventEmitter,
   ElementRef,
-  Renderer2
+  Renderer2,
+  ViewChild
 } from '@angular/core';
-
 
 declare var google;
 declare var $;
@@ -19,17 +19,22 @@ declare var $;
 })
 export class GmapComponent implements OnInit {
 
-  @Input() width: number = 0;
-  @Input() height: number = 0;
+  @Input() width = 0;
+  @Input() height = 0;
 
   @Input() lng: number;
   @Input() lat: number;
   @Input() zoom: number;
+  @Input() name: string;
 
-  @Output() onLoadComplete = new EventEmitter();
+  @Input() DisableClickEvent = false;
 
-  private mapa: HTMLElement;
-  private input: HTMLElement;
+  @ViewChild('mapaContent') mapa: ElementRef;
+  @ViewChild('searchBox') input: ElementRef;
+
+  private mapaName: string;
+  private inputName: string;
+
   private ValleduparCood: any = { center: { lat: 10.4744508, lng: -73.2609084 }, zoom: 14 };
 
   private map: any;
@@ -37,9 +42,7 @@ export class GmapComponent implements OnInit {
   private markers: any[] = [];
   private interval: any = {};
 
-  constructor(private renderer: Renderer2, private el: ElementRef) {
-
-  }
+  constructor(private renderer: Renderer2, private el: ElementRef) { }
 
   private limpiarMarcadores() {
     this.markers.forEach((item) => {
@@ -49,84 +52,43 @@ export class GmapComponent implements OnInit {
   }
 
   public InitMap() {
+    this.DeclareElements();
     this.InitializeElements();
     this.InitializeSearchBox();
     this.InitializeClick();
   }
 
-  private InitializeElements() {
-    this.map = new google.maps.Map(this.mapa, this.ValleduparCood);
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.input);
+  public DeclareElements() {
+    this.mapa.nativeElement.id = this.name;
+    this.mapa.nativeElement.style.width = '100%';
+    this.mapa.nativeElement.style.height = this.height + 'px';
+    this.input.nativeElement.id = 'input' + this.name;
   }
 
-  private InitializeAutocomplete() {
-    var that = this;
-    var marker = new google.maps.Marker({ map: this.map, anchorPoint: new google.maps.Point(0, -29) });
-
-    this.searchBox = new google.maps.places.Autocomplete(this.input);
-    this.searchBox.bindTo('bounds', this.map);
-    this.searchBox.addListener('place_changed', function () {
-
-      var infowindow = new google.maps.InfoWindow();
-      var place = that.searchBox.getPlace();
-      if (!place.geometry) {
-        // User entered the name of a Place that was not suggested and
-        // pressed the Enter key, or the Place Details request failed.
-        window.alert("No details available for input: '" + place.name + "'");
-        return;
-      }
-
-      // If the place has a geometry, then present it on a map.
-      if (place.geometry.viewport) {
-        that.map.fitBounds(place.geometry.viewport);
-      } else {
-        that.map.setCenter(place.geometry.location);
-        that.map.setZoom(17);  // Why 17? Because it looks good.
-      }
-
-      marker.setIcon(/** @type {google.maps.Icon} */({
-        url: place.icon,
-        size: new google.maps.Size(71, 71),
-        origin: new google.maps.Point(0, 0),
-        anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(35, 35)
-      }));
-
-      marker.setPosition(place.geometry.location);
-      marker.setVisible(true);
-
-      var address = '';
-      if (place.address_components) {
-        address = [
-          (place.address_components[0] && place.address_components[0].short_name || ''),
-          (place.address_components[1] && place.address_components[1].short_name || ''),
-          (place.address_components[2] && place.address_components[2].short_name || '')
-        ].join(' ');
-      }
-
-      infowindow.setContent('<div><strong>' + place.name + '</strong><br>' + address);
-      infowindow.open(that.map, marker);
-    });
+  private InitializeElements() {
+    this.markers = [];
+    this.map = new google.maps.Map(this.mapa.nativeElement, this.ValleduparCood);
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(this.input.nativeElement);
   }
 
   private InitializeSearchBox() {
-    var that = this;
-    this.searchBox = new google.maps.places.SearchBox(this.input);
+    const that = this;
+    this.searchBox = new google.maps.places.SearchBox(this.input.nativeElement);
     this.searchBox.addListener('places_changed', function () {
-      var places = that.searchBox.getPlaces();
-      if (places.length == 0) { return; }
+      const places = that.searchBox.getPlaces();
+      if (places.length === 0) { return; }
 
       // For each place, get the icon, name and location.
-      var bounds = new google.maps.LatLngBounds();
+      const bounds = new google.maps.LatLngBounds();
       places.forEach(function (place) {
         if (!place.geometry) {
-          console.log("Returned place contains no geometry");
+          console.log('Returned place contains no geometry');
           return;
         }
 
         that.limpiarMarcadores();
 
-        var marker = new google.maps.Marker({
+        const marker = new google.maps.Marker({
           map: that.map,
           title: place.name,
           position: place.geometry.location
@@ -141,12 +103,14 @@ export class GmapComponent implements OnInit {
   }
 
   private InitializeClick() {
-    var that = this;
+    // tslint:disable-next-line:curly
+    if (this.DisableClickEvent) return;
+
+    const that = this;
     this.map.addListener('click', function (event) {
-      
       that.limpiarMarcadores();
 
-      var marker = new google.maps.Marker({
+      const marker = new google.maps.Marker({
         position: event.latLng,
         map: that.map
       });
@@ -156,13 +120,33 @@ export class GmapComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.mapa = this.el.nativeElement.querySelector('div');
-    this.mapa.style.width = this.width + "px";
-    this.mapa.style.height = this.height + "px";
-    this.input = this.el.nativeElement.querySelector('input');
+
+  }
+
+  public SetMarker(lat: string, lng: string) {
+
+    this.limpiarMarcadores();
+
+    const marker = new google.maps.Marker({
+      position: { lat: Number(lat), lng: Number(lng) },
+      map: this.map
+    });
+
+    this.markers.push(marker);
+    this.map.setZoom(14);
+    this.map.panTo(marker.position);
   }
 
   public GetMarker() {
-    this.map.markers[0];
+
+    if (this.markers.length > 0) {
+      return this.markers[0].position;
+    } else {
+      return null;
+    }
+  }
+
+  public ClearMarker() {
+    this.markers = [];
   }
 }
