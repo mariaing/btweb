@@ -1,7 +1,7 @@
 <div (click)="backgroundClick()">
-    <div class="upload-image row" [ngClass]="{'no-content': showButton == true}">
-        <div class="column align-self-middle">
-            <img style="margin:auto" #selectedImage width="150" height="150" />
+    <div class="upload-image" [ngClass]="{'no-content': showButton == true}">
+        <div>
+            <img style="margin:auto" class="photo-image" #selectedImage width="150" height="150"/>
         </div>
     </div>
     <div class="upload-btn-wrapper" [ngClass]="{'no-content': showButton == false}">

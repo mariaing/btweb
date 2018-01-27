@@ -62,8 +62,7 @@
                 <div class="grid-container">
                     <div id="formulario" class="grid-x grid-padding-x">
                         <div class="medium-12 cell">
-                            <app-photo-uploader></app-photo-uploader>
-                            <!-- <input type="file" (change)="getFiles($event)" name="images" id="files" class="upload" /> -->
+                            <app-photo-uploader #photo></app-photo-uploader>                            
                             <div id="image"></div>
                         </div>
                         <div class="medium-12 cell">
@@ -93,8 +92,8 @@
 
         <div class="medium-12 cell clearfix" style="padding-top: 8px;">
             <button style="margin : 0px 5px" class="alert button small float-right" (click)="limpiar()">Cancelar</button>
-            <button *ngIf="!EditorMode" class="button small float-right" (click)="GuardarEmpresa()">Guardar</button>
-            <button *ngIf="EditorMode" class="button small float-right" (click)="ActualizarEmpresa()">Actualizar</button>
+            <button *ngIf="!EditorMode" class="button small float-right" (click)="Guardar()">Guardar</button>
+            <button *ngIf="EditorMode" class="button small float-right" (click)="Actualizar()">Actualizar</button>
         </div>
     </div>
 

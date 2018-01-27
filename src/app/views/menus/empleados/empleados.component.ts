@@ -6,6 +6,8 @@ import { EmpresasService } from '../../../services/empresas.service';
 import { MapService } from '../../../services/map.service';
 import { UtilService } from '../../../services/util.service';
 import { Empleado } from '../../../models/Empleado';
+import { PhotoUploaderComponent } from './../../controls/photo-uploader/photo-uploader.component';
+import { EmpleadosService } from './../../../services/empleados.service';
 
 declare var $;
 declare var Foundation;
@@ -19,17 +21,25 @@ declare var google;
 export class EmpleadosComponent implements OnInit {
 
   @ViewChild('mapa') mapaComponent: GmapComponent;
+  @ViewChild('photo') photoComponent: PhotoUploaderComponent;
+
   empresas: any = [];
+  empleados: any = [];
+
   nuevoEmpleado: Empleado = new Empleado();
   filtro: string;
   modalName = 'ModalNuevoEditar';
   files: FileList;
 
-  constructor(private empSVC: EmpresasService, private mapSVC: MapService, public util: UtilService) { }
+  constructor(private empSVC: EmpresasService, private emplSVC : EmpleadosService, private mapSVC: MapService, public util: UtilService) { }
 
   GetEmpresas() {
     this.empSVC.all().subscribe(s => {
       this.empresas = s;
+    });
+
+    this.emplSVC.getEmpleados().subscribe(s => {
+      this.empleados = s;
     });
   }
 
@@ -55,20 +65,8 @@ export class EmpleadosComponent implements OnInit {
     $('#ModalNuevoEditar').foundation('open');
   }
 
-  getFiles(event: any) {
-    this.files = event.target.files;
-    for (let i = 0, f; f = this.files[i]; i++) {
-      if (!f.type.match('image.*')) {
-        continue;
-      }
-      let reader = new FileReader();
-      reader.onload = (function (theFile) {
-        return function (e) {
-          const components = ['<img class="animated bounceIn" style="width:60%; margin-left:20%" src="', e.target.result, '" />'];
-          document.getElementById('image').innerHTML = components.join('');
-        };
-      })(f);
-      reader.readAsDataURL(f);
-    }
+  Guardar() {
+    const foto = this.photoComponent.GetPhoto();
+    console.log(foto);
   }
 }

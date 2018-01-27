@@ -10,10 +10,13 @@ import { HttpModule } from "@angular/http";
 import { UsuarioService } from './services/usuario.service';
 import { UtilService } from './services/util.service';
 import { AuthService } from "./services/auth.service";
-import { MenuService } from "./services/menu.services";
+import { MenuService } from './services/menu.services';
+import { EmpresasService } from './services/empresas.service';
+import { EmpleadosService } from './services/empleados.service';
+import { MapService } from './services/map.service';
 
-import { HTTP_INTERCEPTORS, HttpClientModule } from "@angular/common/http";
-import { BTInterceptor } from "./util/interceptor";
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { BTInterceptor } from './util/interceptor';
 import { FormsModule } from '@angular/forms';
 import { ToastModule } from 'ng2-toastr/ng2-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -21,8 +24,7 @@ import { AsignacionComponent } from './views/menus/asignacion/asignacion.compone
 import { EmpresasComponent } from './views/menus/empresas/empresas.component';
 import { EmpleadosComponent } from './views/menus/empleados/empleados.component';
 import { ConsultasComponent } from './views/menus/consultas/consultas.component';
-import { EmpresasService } from "./services/empresas.service";
-import { MapService } from './services/map.service';
+
 import { GmapComponent } from './views/controls/gmap/gmap.component';
 import { FiltroEmpresaPipe } from './pipes/filtro-empresa.pipe';
 import { LoadingComponent } from './views/controls/loading/loading.component';
@@ -35,24 +37,36 @@ import { PhotoUploaderComponent } from './views/controls/photo-uploader/photo-up
 
 const appRoutes: Routes = [
 
-  { path: "", component: LoginComponent },
-  { path: "login", component: LoginComponent },
+  { path: '', component: LoginComponent },
+  { path: 'login', component: LoginComponent },
   {
-    path: "dashboard", component: DashboardComponent,
+    path: 'dashboard', component: DashboardComponent,
     children: [
-      { path: "empresas", component: EmpresasComponent },
-      { path: "empleados", component: EmpleadosComponent },
-      { path: "asignacion", component: AsignacionComponent },
-      { path: "consultas", component: ConsultasComponent }
+      { path: 'empresas', component: EmpresasComponent },
+      { path: 'empleados', component: EmpleadosComponent },
+      { path: 'asignacion', component: AsignacionComponent },
+      { path: 'consultas', component: ConsultasComponent }
     ]
   }
 
 ]
 
 @NgModule({
-  declarations: [AppComponent, LoginComponent, DashboardComponent, AsignacionComponent, EmpresasComponent, EmpleadosComponent, ConsultasComponent, GmapComponent, FiltroEmpresaPipe, LoadingComponent, PhotoUploaderComponent],
+  declarations: [
+    AppComponent, 
+    LoginComponent,
+    DashboardComponent,
+    AsignacionComponent,
+    EmpresasComponent,
+    EmpleadosComponent,
+    ConsultasComponent,
+    GmapComponent,
+    FiltroEmpresaPipe,
+    LoadingComponent,
+    PhotoUploaderComponent
+  ],
   imports: [  
-  HttpClientModule,
+HttpClientModule,
     HttpModule,
     BrowserModule,
     FormsModule,
@@ -68,6 +82,7 @@ const appRoutes: Routes = [
     UtilService,
     MenuService,
     EmpresasService,
+    EmpleadosService,
     MapService
   ],
   bootstrap: [AppComponent]

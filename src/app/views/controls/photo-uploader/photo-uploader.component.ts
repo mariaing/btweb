@@ -14,11 +14,11 @@ export class PhotoUploaderComponent implements OnInit {
   showButton = true;
   @ViewChild('inputContent') input: ElementRef;
   @ViewChild('selectedImage') selectedImage: ElementRef;
-  constructor(private el: ElementRef, private cdr: ChangeDetectorRef,private sanitizer: DomSanitizer) { }
+  constructor(private el: ElementRef, private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer) { }
 
   ngOnInit() { }
 
-  getFiles(event: any) {
+  private getFiles(event: any) {
     const that = this;
     this.files = event.target.files;
     for (let i = 0, f; f = this.files[i]; i++) {
@@ -37,14 +37,18 @@ export class PhotoUploaderComponent implements OnInit {
     }
   }
 
-  backgroundClick(){ 
-    if(!this.showButton){
+  private backgroundClick() {
+    if (!this.showButton) {
       $('#files').trigger('click');
     }
   }
 
-  public GetPhoto(){
-    return this.files[0];
+  public GetPhoto() {
+    if (this.files.length > 0) {
+      return this.files[0];
+    } else {
+      return null;
+    }
   }
 }
 
