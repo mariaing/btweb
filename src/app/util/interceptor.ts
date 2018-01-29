@@ -16,20 +16,20 @@ export class BTInterceptor implements HttpInterceptor {
   constructor(private auth: AuthService, private util : UtilService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    const that = this;
+
     const authToken = this.auth.ObtenerToken();
     var auth_req = req.clone({
       setHeaders: {
         token: authToken
       }
-    });
+    });        
 
     return next
       .handle(req)
-      .do(event => {
-        if (event instanceof HttpResponse) {
-                    
-        }
-      }, err => {
+      .do(event => {        
+      }, err => {        
         switch (err.status) {
           case 504:
             this.util.showErrorTitle("Error","Servidor fuera de servicio");
@@ -46,9 +46,6 @@ export class BTInterceptor implements HttpInterceptor {
           default:
           this.util.showError(JSON.stringify(err));                                  
             break;
-        }
-        if (err.status === 500) {
-
         }
       });
   }

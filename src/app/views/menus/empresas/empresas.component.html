@@ -7,7 +7,7 @@
 <div class="grid-x">
   <div class="medium-3">
     <p>
-      <button class="button" data-open="exampleModal1">Nueva Empresa</button>
+      <button class="button" data-open="newEmpresaModal">Nueva Empresa</button>
     </p>
   </div>
 </div>
@@ -41,11 +41,65 @@
           </div>
         </td>
       </tr>
-
     </table>
   </div>
 </div>
  
+<div class="reveal large" id="newEmpresaModal" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
+  <h3 style="margin-left: 12px">Empresa</h3>
+
+  <div class="grid-x">
+    <div class="medium-4 cell">
+        <form>
+            <div class="grid-container">
+                <div id="formulario" class="grid-x grid-padding-x">                    
+                    <div class="medium-12 cell">
+                        <label>NIT
+                            <input type="text" [disabled]="EditorMode" [(ngModel)]="nuevaEmpresa.nit" name="nit" placeholder="Digite el nit aqui">
+                        </label>
+                    </div>
+                    <div class="medium-12 cell">
+                        <label>NOMBRE
+                            <input type="text" [(ngModel)]="nuevaEmpresa.nombre" name="nombre" placeholder="Digite el nombre aqui">
+                        </label>
+                    </div>
+                    <div class="medium-12 cell">
+                        <label>TELEFONO
+                            <input type="text" [(ngModel)]="nuevaEmpresa.telefono" name="telefono" placeholder="Digite la direccion aqui">
+                        </label>
+                    </div>
+                    <div class="medium-12 cell">
+                        <label>DIRECCION
+                            <input type="text" [(ngModel)]="nuevaEmpresa.direccion" name="direccion" placeholder="Digite el telefono aqui">
+                        </label>
+                    </div>
+                    <div class="medium-12 cell">
+                        <label>CONTRASEÑA
+                            <input type="password" [(ngModel)]="nuevaEmpresa.password" name="password" placeholder="Digite el telefono aqui">
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </form>            
+    </div>
+
+    <div class="medium-8 cell">
+        <label>ubicacion de la empresa </label>
+        <app-gmap #mapa [name]="'mapaFormEmpresa'" [height]="360" [DisableClickEvent]="true"></app-gmap>    
+    </div>
+
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+      <span aria-hidden="true">&times;</span>
+    </button>
+
+    <div class="medium-12 cell clearfix" style="padding-top: 8px;">
+        <button style="margin : 0px 5px" class="alert button small float-right" (click)="limpiar()">Cancelar</button>
+        <button *ngIf="!EditorMode" class="button small float-right" (click)="Guardar()">Guardar</button>
+        <button *ngIf="EditorMode" class="button small float-right" (click)="Actualizar()">Actualizar</button>
+    </div>
+    
+  </div>
+
 
 <div class="reveal small" id="mapModal" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
   <h3 style="margin-left: 12px">Empresa</h3>

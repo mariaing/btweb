@@ -21,12 +21,16 @@ export class UsuarioService {
       "Password": password
     }).subscribe(
       s => {
-        this.auth.EstablecerUser(s.Data);
-        this.auth.EstablecerToken(s.Data.Token);
-        this.util.showSuccess("Login Existoso");
-        if (this.auth.IsLoggin()) {
-          this.router.navigateByUrl('/dashboard');
-        }
+        if(s.IsOk){
+          this.auth.EstablecerUser(s.Data);
+          this.auth.EstablecerToken(s.Data.Token);
+          this.util.showSuccess("Login Existoso");
+          if (this.auth.IsLoggin()) {
+            this.router.navigateByUrl('/dashboard');
+          }
+        }else{
+          this.util.showErrorTitle('Error','Credenciales invalidas');
+        }        
       });
   }
 

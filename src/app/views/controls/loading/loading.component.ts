@@ -8,8 +8,10 @@ import { UtilService } from '../../../services/util.service';
 })
 export class LoadingComponent implements OnInit {
 
-  @Input() Show = false;
-  constructor(public util: UtilService) { }
+  
+  public showLoader = false;
+
+  constructor() { }
 
   ngOnInit() {
 

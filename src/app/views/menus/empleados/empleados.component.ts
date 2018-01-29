@@ -8,6 +8,7 @@ import { UtilService } from '../../../services/util.service';
 import { Empleado } from '../../../models/Empleado';
 import { PhotoUploaderComponent } from './../../controls/photo-uploader/photo-uploader.component';
 import { EmpleadosService } from './../../../services/empleados.service';
+import { Subject } from 'rxjs/Subject';
 
 declare var $;
 declare var Foundation;
@@ -22,23 +23,27 @@ export class EmpleadosComponent implements OnInit {
 
   @ViewChild('mapa') mapaComponent: GmapComponent;
   @ViewChild('photo') photoComponent: PhotoUploaderComponent;
-
+  
+  loading = new Subject<number>();
+  
   empresas: any = [];
   empleados: any = [];
 
   nuevoEmpleado: Empleado = new Empleado();
   filtro: string;
   modalName = 'ModalNuevoEditar';
-  files: FileList;
+  files: FileList;  
 
-  constructor(private empSVC: EmpresasService, private emplSVC : EmpleadosService, private mapSVC: MapService, public util: UtilService) { }
+  constructor(private empSVC: EmpresasService, private emplSVC : EmpleadosService, private mapSVC: MapService, public util: UtilService) {  }
 
   GetEmpresas() {
-    this.empSVC.all().subscribe(s => {
+    const that = this;    
+    this.empSVC.all().subscribe(s => {            
       this.empresas = s;
     });
 
-    this.emplSVC.getEmpleados().subscribe(s => {
+    
+    this.emplSVC.getEmpleados().subscribe(s => {          
       this.empleados = s;
     });
   }

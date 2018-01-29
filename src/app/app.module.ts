@@ -9,8 +9,8 @@ import { HttpModule } from "@angular/http";
 
 import { UsuarioService } from './services/usuario.service';
 import { UtilService } from './services/util.service';
-import { AuthService } from "./services/auth.service";
-import { MenuService } from './services/menu.services';
+import { AuthService } from './services/auth.service';
+import { MenuService } from './services/menu.service';
 import { EmpresasService } from './services/empresas.service';
 import { EmpleadosService } from './services/empleados.service';
 import { MapService } from './services/map.service';
@@ -29,6 +29,7 @@ import { GmapComponent } from './views/controls/gmap/gmap.component';
 import { FiltroEmpresaPipe } from './pipes/filtro-empresa.pipe';
 import { LoadingComponent } from './views/controls/loading/loading.component';
 import { PhotoUploaderComponent } from './views/controls/photo-uploader/photo-uploader.component';
+
 /*
 ############################################################
 ##                        route

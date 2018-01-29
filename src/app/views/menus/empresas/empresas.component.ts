@@ -24,10 +24,9 @@ export class EmpresasComponent implements OnInit {
   nuevaEmpresa: Empresa = new Empresa();
   empresas: any = [];
 
-  modalName = 'exampleModal1';
-  modalID = '#exampleModal1';
+  modalName = 'newEmpresaModal';
+  modalID = '#newEmpresaModal';
   modal: any;
-  mapName = 'mapCreateEmpresa';
 
   showMapModalName = 'mapModal';
   showMapModalID = '#mapModal';
@@ -40,8 +39,11 @@ export class EmpresasComponent implements OnInit {
   constructor(private empSVC: EmpresasService, private mapSVC: MapService, public util: UtilService) { }
 
   GetEmpresas() {
+    const that = this;    
     this.empSVC.all().subscribe(
-      s => { this.empresas = s; }
+      s => { 
+        this.empresas = s;         
+      }
     );
   }
 
@@ -74,7 +76,7 @@ export class EmpresasComponent implements OnInit {
     this.ModalsInit();
   }
 
-  GuardarEmpresa() {
+  Guardar() {
     const marker = this.mapaComponent.GetMarker();
     if (marker === null) {
       this.util.showErrorTitle('Error', 'Debe elegir una ubicacion valida');
@@ -94,7 +96,7 @@ export class EmpresasComponent implements OnInit {
     });
   }
 
-  ActualizarEmpresa() {
+  Actualizar() {
     const marker = this.mapaComponent.GetMarker();
     if (marker === null) {
       this.util.showErrorTitle('Error', 'Debe elegir una ubicacion valida');

@@ -1,5 +1,7 @@
 import { Injectable, ViewContainerRef } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr';
+import { Subject } from 'rxjs/Subject';
+import { query } from '@angular/core/src/animation/dsl';
 
 declare var Foundation;
 declare var jQuery: any;
@@ -8,12 +10,14 @@ declare var $;
 @Injectable()
 export class UtilService {
 
-  constructor(public toastr: ToastsManager) {
-  }
+  constructor(public toastr: ToastsManager) { }
 
   public appState: string;
   public filtro: string;
   public loading = false;
+  private Querys = 0;
+  public ShowLoading = new Subject<number>();
+  
 
   init(root: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(root);
@@ -46,7 +50,7 @@ export class UtilService {
   initModal(id: string, onOpen?: any, onClose?: any) {
     const modal = $(String.fromCharCode(35) + id);
     const found = new Foundation.Reveal(modal);
-
+    
     modal.on('open.zf.reveal', () => {
       setTimeout(() => { if (typeof onOpen !== 'undefined') { onOpen(modal); } }, 300);
     });
@@ -56,12 +60,14 @@ export class UtilService {
     });
   }
 
-  LoadingOn(){
-    this.loading = true;
+  LoadingOn(){    
+    this.Querys++;
+    this.ShowLoading.next(this.Querys);
   }
 
   loadingOff(){
-    this.loading = false;
+    this.Querys--;
+    this.ShowLoading.next(this.Querys);
   }
 
 }
