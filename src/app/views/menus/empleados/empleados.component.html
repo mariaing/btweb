@@ -4,7 +4,8 @@
             <div class="grid-x grid-padding-x">
                 <div class="medium-6 cell">
                     <label>Seleccione una empresa
-                        <select (change)="SeleccionoEmpresa($event.target.value)">
+                        <select (change)="FiltroEmpresa($event.target.value)">
+                            <option value="-1" selected>todos</option>
                             <option *ngFor="let empresa of empresas | filtroEmpresa:filtro" [value]="empresa.id">{{ empresa.nit + ' - ' + empresa.nombre }}</option>
                         </select>
                     </label>
@@ -19,70 +20,95 @@
                 </div>
             </div>
         </div>
-        <div class="medium-9" style="max-height: 200px">
-            <table class="unstriped">
-                <tr>
-                    <th>Id</th>
-                    <th>Nombres</th>
-                    <th>Apellidos</th>
-                    <th>Telefono</th>
-                    <th>direccion</th>
-                    <th>foto</th>
-                </tr>
+        <div class="grid-x medium-12" style="max-height: 420px;overflow-y: scroll">
+            <div class="medium-12">
+                <table class="unstriped">
+                    <tr>
+                        <th>Id</th>
+                        <th>Nombres</th>
+                        <th>Apellidos</th>
+                        <th>Telefono</th>
+                        <th>direccion</th>
+                        <th style="text-align: center">foto</th>
+                        <th style="text-align: center">Acciones</th>
+                    </tr>
 
-                <tr *ngFor="let empleado of empleados | filtroEmpresa:util.filtro">
-                    <td>{{ empleado.id }}</td>
-                    <td>{{ empleado.nombres }}</td>
-                    <td>{{ empleado.apellidos }}</td>
-                    <td>{{ empleado.telefono }}</td>
-                    <td>{{ empleado.direccion }}</td>
-                    <td style="text-align: center">
-                        <div class="grid-x">
-                            <div (click)="MostrarUbicacion(empresa)" class="button-cursor float-center medium-6">
-                                <i class="material-icons">remove_red_eye</i>
+                    <tr *ngFor="let empleado of empleados | filtroEmpleado: util.filtro:FiltroEmpresaID ">
+                        <td>{{ empleado.id }}</td>
+                        <td>{{ empleado.nombres }}</td>
+                        <td>{{ empleado.apellidos }}</td>
+                        <td>{{ empleado.telefono }}</td>
+                        <td>{{ empleado.direccion }}</td>
+                        <td style="text-align: center">
+                            <img height="32" width="32" src="{{ rootImage + empleado.foto }}" />
+                        </td>
+                        <td style="text-align: center">
+                            <div class="grid-x" style="color: #1779ba">
+                                <div (click)="MostrarUbicacion(empleado)" class="button-cursor float-center medium-4">
+                                    <i class="material-icons">assignment</i>
+                                </div>
+                                <div (click)="showEditarEmpleado(empleado)" class="button-cursor float-center medium-4">
+                                    <i class="material-icons">mode_edit</i>
+                                </div>
+                                <div (click)="AsignarServicio(empleado)" class="button-cursor float-center medium-4">
+                                    <i class="material-icons">add_location</i>
+                                </div>
                             </div>
-                            <div (click)="MostrarEditar(empresa)" class="button-cursor float-center medium-6">
-                                <i class="material-icons">mode_edit</i>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                    </tr>
 
-            </table>
+                </table>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="reveal tiny" id="ModalNuevoEditar" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
+<div class="reveal" id="ModalNuevoEditar" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
     <h3 style="margin-left: 12px">Empleado</h3>
 
     <div class="grid-x">
-        <div class="medium-12">
+        <div class="medium-12 cell">
             <form>
-                <div class="grid-container">
-                    <div id="formulario" class="grid-x grid-padding-x">
+                <div id="formulario" class="grid-x">
+                    <div class="grid-x grid-padding-x medium-6 cell">
                         <div class="medium-12 cell">
-                            <app-photo-uploader #photo></app-photo-uploader>                            
+                            <app-photo-uploader #photo></app-photo-uploader>
                             <div id="image"></div>
                         </div>
                         <div class="medium-12 cell">
-                            <label>Nombres
-                                <input type="text" [disabled]="EditorMode" [(ngModel)]="nuevoEmpleado.nombres" name="nit" placeholder="Digite el nit aqui">
+                            <label>NOMBRES
+                                <input type="text" [(ngModel)]="nuevoEmpleado.nombres" name="nit" placeholder="Digite el nit aqui">
                             </label>
                         </div>
                         <div class="medium-12 cell">
-                            <label>Apellidos
+                            <label>APELLIDOS
                                 <input type="text" [(ngModel)]="nuevoEmpleado.apellidos" name="nombre" placeholder="Digite el nombre aqui">
                             </label>
                         </div>
+                    </div>
+
+                    <div class="grid-x grid-padding-x medium-6 cell">
                         <div class="medium-12 cell">
-                            <label>Telefono
-                                <input type="text" [(ngModel)]="nuevoEmpleado.telefono" name="direccion" placeholder="Digite la direccion aqui">
+                            <label>IDENTIFICACION
+                                <input type="text" [disabled]="EditMode" [(ngModel)]="nuevoEmpleado.identificacion" name="direccion" placeholder="Digite la direccion aqui"
+                                />
                             </label>
                         </div>
                         <div class="medium-12 cell">
-                            <label>Direccion
-                                <input type="text" [(ngModel)]="nuevoEmpleado.direccion" name="telefono" placeholder="Digite el telefono aqui">
+                            <label>DIRECCION
+                                <input type="text" [(ngModel)]="nuevoEmpleado.direccion" name="telefono" placeholder="Digite el telefono aqui" />
+                            </label>
+                        </div>
+                        <div class="medium-12 cell">
+                            <label>SELECCIONE UNA EMPRESA
+                                <select [disabled]="EditMode" (change)="SeleccionoEmpresa($event.target.value)">
+                                    <option *ngFor="let empresa of empresas | filtroEmpresa:filtro" [value]="empresa.id">{{ empresa.nit + ' - ' + empresa.nombre }}</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div class="medium-12 cell">
+                            <label>TELEFONO
+                                <input type="text" [(ngModel)]="nuevoEmpleado.telefono" name="direccion" placeholder="Digite la direccion aqui" />
                             </label>
                         </div>
                     </div>
@@ -90,10 +116,59 @@
             </form>
         </div>
 
-        <div class="medium-12 cell clearfix" style="padding-top: 8px;">
+        <div class="medium-12 cell clearfix" style="padding-right: 10px">
             <button style="margin : 0px 5px" class="alert button small float-right" (click)="limpiar()">Cancelar</button>
-            <button *ngIf="!EditorMode" class="button small float-right" (click)="Guardar()">Guardar</button>
-            <button *ngIf="EditorMode" class="button small float-right" (click)="Actualizar()">Actualizar</button>
+            <button *ngIf="!EditMode" class="button small float-right" (click)="Guardar()">Guardar</button>
+            <button *ngIf="EditMode" class="button small float-right" (click)="Actualizar()">Actualizar</button>
+        </div>
+    </div>
+
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
+<div class="reveal large" id="ModalAsignarServicio" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
+    <h3 style="margin-left: 12px">Servicios</h3>
+    <div class="grid-x">
+        <div class="medium-12 cell">
+            <form>
+                <div id="formulario" class="grid-x">
+                    <div class="grid-x grid-padding-x medium-3 cell">
+                        <div class="medium-12 cell">
+                            <label>NOMBRES
+                                <input type="text" [(ngModel)]="nuevoEmpleado.nombres" name="nit" placeholder="Digite el nit aqui">
+                            </label>
+                        </div>
+                        <div class="medium-12 cell">
+                            <label>NOMBRES
+                                <input type="text" [(ngModel)]="nuevoEmpleado.nombres" name="nit" placeholder="Digite el nit aqui">
+                            </label>
+                        </div>
+                        <div class="medium-12 cell">
+                            <label>APELLIDOS
+                                <input type="text" [(ngModel)]="nuevoEmpleado.apellidos" name="nombre" placeholder="Digite el nombre aqui">
+                            </label>
+                        </div>
+                        <div class="medium-12 cell">
+                            <label>NOMBRES
+                                <input type="text" [(ngModel)]="nuevoEmpleado.nombres" name="nit" placeholder="Digite el nit aqui">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="medium-9 cell">
+                        <label>ELIJA LA UBICACION DEL SERVICIO AQUI</label>
+                        <app-gmap #mapServicios [name]="'servicesMap'" [height]="300"></app-gmap>
+                    </div>
+
+                    <div class="medium-12 cell clearfix">
+                        <button class="alert button small float-right" (click)="limpiar()">Cancelar</button>
+                        <button class="button small float-right" (click)="Guardar()">Guardar</button>                        
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

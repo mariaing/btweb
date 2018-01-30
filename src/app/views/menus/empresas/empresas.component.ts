@@ -39,10 +39,10 @@ export class EmpresasComponent implements OnInit {
   constructor(private empSVC: EmpresasService, private mapSVC: MapService, public util: UtilService) { }
 
   GetEmpresas() {
-    const that = this;    
+    const that = this;
     this.empSVC.all().subscribe(
-      s => { 
-        this.empresas = s;         
+      s => {
+        this.empresas = s;
       }
     );
   }
@@ -52,7 +52,7 @@ export class EmpresasComponent implements OnInit {
     const that = this;
     this.util.initModal(
       this.modalName,
-      () => { 
+      () => {
         that.mapaComponent.InitMap();
         if(this.EditorMode) {
           that.mapaComponent.SetMarker(that.nuevaEmpresa.latitud, that.nuevaEmpresa.longitud);
@@ -86,7 +86,7 @@ export class EmpresasComponent implements OnInit {
     this.nuevaEmpresa.latitud = marker.lat();
     this.nuevaEmpresa.longitud = marker.lng();
     this.nuevaEmpresa.id = null;
-    this.empSVC.guardar(this.nuevaEmpresa).subscribe((s: Result<Empresa>) => {      
+    this.empSVC.guardar(this.nuevaEmpresa).subscribe((s: Result<Empresa>) => {
       if (s.IsOk === true) {
         this.util.showSuccess('Registro guardado exitosamente!');
         $(this.modalID).foundation('close');
@@ -119,6 +119,7 @@ export class EmpresasComponent implements OnInit {
   limpiar() {
     this.nuevaEmpresa = new Empresa();
     this.mapaComponent.ClearMarker();
+    $(this.modalID).foundation('close');
   }
 
   MostrarUbicacion(emp: Empresa) {

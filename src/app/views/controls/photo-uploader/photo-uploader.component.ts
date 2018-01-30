@@ -26,10 +26,11 @@ export class PhotoUploaderComponent implements OnInit {
         continue;
       }
 
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.onload = (function (theFile) {
         return function (e) {
-          that.showButton = false;
+          console.log(e);
+          that.showButton = false;          
           that.selectedImage.nativeElement.src = e.target.result;
         };
       })(f);
@@ -43,12 +44,27 @@ export class PhotoUploaderComponent implements OnInit {
     }
   }
 
+  public SetPhoto(uri: string) {
+    this.showButton = false;
+    this.selectedImage.nativeElement.src = uri;
+  }
+
+  public ClearPhoto(){
+    this.showButton = true;
+    this.selectedImage.nativeElement.src = '#';
+  }
+
   public GetPhoto() {
-    if (this.files.length > 0) {
-      return this.files[0];
+    if (this.files) {
+      if (this.files.length > 0) {
+        return this.files[0];
+      } else {
+        return null;
+      }
     } else {
       return null;
     }
+
   }
 }
 

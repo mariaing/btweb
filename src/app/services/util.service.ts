@@ -50,7 +50,7 @@ export class UtilService {
   initModal(id: string, onOpen?: any, onClose?: any) {
     const modal = $(String.fromCharCode(35) + id);
     const found = new Foundation.Reveal(modal);
-    
+
     modal.on('open.zf.reveal', () => {
       setTimeout(() => { if (typeof onOpen !== 'undefined') { onOpen(modal); } }, 300);
     });
@@ -60,7 +60,7 @@ export class UtilService {
     });
   }
 
-  LoadingOn(){    
+  LoadingOn(){
     this.Querys++;
     this.ShowLoading.next(this.Querys);
   }

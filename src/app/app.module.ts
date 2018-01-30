@@ -1,11 +1,11 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
-import { BsModalModule } from "ng2-bs3-modal";
-import { AppComponent } from "./app.component";
-import { LoginComponent } from "./views/login/login.component";
-import { RouterModule, Routes } from "@angular/router";
-import { DashboardComponent } from "./views/dashboard/dashboard.component";
-import { HttpModule } from "@angular/http";
+import { BrowserModule } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
+import { BsModalModule } from 'ng2-bs3-modal';
+import { AppComponent } from './app.component';
+import { LoginComponent } from './views/login/login.component';
+import { RouterModule, Routes } from '@angular/router';
+import { DashboardComponent } from './views/dashboard/dashboard.component';
+import { HttpModule } from '@angular/http';
 
 import { UsuarioService } from './services/usuario.service';
 import { UtilService } from './services/util.service';
@@ -29,7 +29,7 @@ import { GmapComponent } from './views/controls/gmap/gmap.component';
 import { FiltroEmpresaPipe } from './pipes/filtro-empresa.pipe';
 import { LoadingComponent } from './views/controls/loading/loading.component';
 import { PhotoUploaderComponent } from './views/controls/photo-uploader/photo-uploader.component';
-
+import { FiltroEmpleadoPipe } from './pipes/filtro-empleado.pipe';
 /*
 ############################################################
 ##                        route
@@ -50,11 +50,11 @@ const appRoutes: Routes = [
     ]
   }
 
-]
+];
 
 @NgModule({
   declarations: [
-    AppComponent, 
+    AppComponent,
     LoginComponent,
     DashboardComponent,
     AsignacionComponent,
@@ -64,9 +64,10 @@ const appRoutes: Routes = [
     GmapComponent,
     FiltroEmpresaPipe,
     LoadingComponent,
-    PhotoUploaderComponent
+    PhotoUploaderComponent,
+    FiltroEmpleadoPipe
   ],
-  imports: [  
+  imports: [
 HttpClientModule,
     HttpModule,
     BrowserModule,

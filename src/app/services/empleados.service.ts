@@ -11,7 +11,11 @@ export class EmpleadosService {
     return this.http.get('api/empleados');
   }
 
-  public guardarEmpleados(empleado: Empleado) {
-    return this.http.post('api/empleados', empleado);
+  public guardarEmpleados(formData: FormData) {
+    return this.http.post('api/empleados/save', formData);
+  }
+
+  public ActualizarEmpleado(id: number, formData: FormData){
+    return this.http.post('api/empleados/update/' + id, formData);
   }
 }

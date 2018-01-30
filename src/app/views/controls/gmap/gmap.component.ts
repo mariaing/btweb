@@ -108,6 +108,7 @@ export class GmapComponent implements OnInit {
 
     const that = this;
     this.map.addListener('click', function (event) {
+      console.log('se ha generado un click');
       that.limpiarMarcadores();
 
       const marker = new google.maps.Marker({

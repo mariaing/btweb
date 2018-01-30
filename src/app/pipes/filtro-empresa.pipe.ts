@@ -6,7 +6,7 @@ import { Empresa } from '../models/Empresa';
 })
 export class FiltroEmpresaPipe implements PipeTransform {
 
-  transform(items: Empresa[], filtro?: string): any {  
+  transform(items: Empresa[], filtro?: string): any {
     if (!items || !filtro) { return items; }
     return items.filter(
       item => (
