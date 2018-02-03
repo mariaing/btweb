@@ -19,4 +19,12 @@ export class EmpresasService {
     return this.http.post('api/empresas/update/' + emp.id, emp);
   }
 
+
+  getNameEmpresa(id: number, empresas: Empresa[]) {
+    const empresa: Empresa[] = empresas.filter(f => (f.id === id));
+    if (!empresa) { alert('no existen empresas disponibles!'); return null; }
+    if (empresa.length < 1) { alert('no existen empresas disponibles!'); return null; }
+    return empresa[0].nombre.toUpperCase();
+  }
+
 }

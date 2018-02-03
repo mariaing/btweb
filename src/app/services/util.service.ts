@@ -2,6 +2,7 @@ import { Injectable, ViewContainerRef } from '@angular/core';
 import { ToastsManager } from 'ng2-toastr';
 import { Subject } from 'rxjs/Subject';
 import { query } from '@angular/core/src/animation/dsl';
+import { Result } from './../models/Result';
 
 declare var Foundation;
 declare var jQuery: any;
@@ -17,7 +18,7 @@ export class UtilService {
   public loading = false;
   private Querys = 0;
   public ShowLoading = new Subject<number>();
-  
+
 
   init(root: ViewContainerRef) {
     this.toastr.setRootViewContainerRef(root);
@@ -35,8 +36,8 @@ export class UtilService {
     this.toastr.error(mensaje, 'Oops!');
   }
 
-  showWarning() {
-    this.toastr.warning('You are being warned.', 'Alert!');
+  showWarning(mensaje: string) {
+    this.toastr.warning(mensaje, 'advertencia');
   }
 
   showInfo() {
@@ -56,18 +57,56 @@ export class UtilService {
     });
 
     modal.on('closed.zf.reveal', () => {
-      if (typeof onOpen !== 'undefined') { onClose(modal); }
+      if (typeof onClose === 'function') { onClose(modal); }
     });
   }
 
-  LoadingOn(){
+  LoadingOn() {
     this.Querys++;
     this.ShowLoading.next(this.Querys);
   }
 
-  loadingOff(){
+  loadingOff() {
     this.Querys--;
     this.ShowLoading.next(this.Querys);
   }
 
+  getActualDate() {
+    const fecha = new Date();
+    const year = fecha.getFullYear() + '-';
+    let month = (fecha.getMonth() + 1) + '-';
+    let day = fecha.getDate() + '';
+
+    if (fecha.getMonth() < 10) { month = '0' + month; }
+    if (fecha.getDay() < 10) { day = '0' + day; }
+
+    return year + month + day;
+  }
+
+  getTime() {
+    const fecha = new Date();
+    let hora = fecha.getHours() + '';
+    let minutos = fecha.getMinutes() + '';
+
+    if (fecha.getHours() < 10) { hora = '0' + hora; }
+    if (fecha.getMinutes() < 10) { minutos = '0' + minutos; }
+
+    return hora + ':' + minutos;
+  }
+
+  Str2Date(str: string, hora: number, minuto: number): Result<Date> {
+    const component = str.split('-');
+    try {
+      console.log(component);
+      const data = new Date(Number(component[0]), Number(component[1]) - 1, Number(component[2]), hora, minuto, 0, 0);
+      const res = new Result<Date>();
+      res.Data = data;
+      res.IsOk = true;
+      return res;
+    } catch(e) {
+      const res = new Result<Date>();
+      res.IsOk = false;
+      return res;
+    }
+  }
 }

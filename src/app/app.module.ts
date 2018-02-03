@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { BsModalModule } from 'ng2-bs3-modal';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './views/login/login.component';
@@ -14,6 +14,7 @@ import { MenuService } from './services/menu.service';
 import { EmpresasService } from './services/empresas.service';
 import { EmpleadosService } from './services/empleados.service';
 import { MapService } from './services/map.service';
+import { ServiciosService } from './services/servicios.service';
 
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { BTInterceptor } from './util/interceptor';
@@ -30,11 +31,16 @@ import { FiltroEmpresaPipe } from './pipes/filtro-empresa.pipe';
 import { LoadingComponent } from './views/controls/loading/loading.component';
 import { PhotoUploaderComponent } from './views/controls/photo-uploader/photo-uploader.component';
 import { FiltroEmpleadoPipe } from './pipes/filtro-empleado.pipe';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import { FiltroServicioPipe } from './pipes/filtro-servicio.pipe';
 /*
 ############################################################
 ##                        route
 ############################################################
  */
+
+registerLocaleData(localeEs, 'es-CO');
 
 const appRoutes: Routes = [
 
@@ -65,7 +71,8 @@ const appRoutes: Routes = [
     FiltroEmpresaPipe,
     LoadingComponent,
     PhotoUploaderComponent,
-    FiltroEmpleadoPipe
+    FiltroEmpleadoPipe,
+    FiltroServicioPipe
   ],
   imports: [
 HttpClientModule,
@@ -78,6 +85,7 @@ HttpClientModule,
     BrowserAnimationsModule
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: 'es-CO' },
     { provide: HTTP_INTERCEPTORS, useClass: BTInterceptor, multi: true },
     AuthService,
     UsuarioService,
@@ -85,7 +93,8 @@ HttpClientModule,
     MenuService,
     EmpresasService,
     EmpleadosService,
-    MapService
+    MapService,
+    ServiciosService
   ],
   bootstrap: [AppComponent]
 })

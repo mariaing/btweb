@@ -40,11 +40,11 @@
                         <td>{{ empleado.telefono }}</td>
                         <td>{{ empleado.direccion }}</td>
                         <td style="text-align: center">
-                            <img height="32" width="32" src="{{ rootImage + empleado.foto }}" />
+                            <img height="24" width="24" src="{{ rootImage + empleado.foto }}" />
                         </td>
                         <td style="text-align: center">
                             <div class="grid-x" style="color: #1779ba">
-                                <div (click)="MostrarUbicacion(empleado)" class="button-cursor float-center medium-4">
+                                <div (click)="showServicios(empleado)" class="button-cursor float-center medium-4">
                                     <i class="material-icons">assignment</i>
                                 </div>
                                 <div (click)="showEditarEmpleado(empleado)" class="button-cursor float-center medium-4">
@@ -130,45 +130,153 @@
 
 
 <div class="reveal large" id="ModalAsignarServicio" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
-    <h3 style="margin-left: 12px">Servicios</h3>
+    <div class="grid-x">
+        <div class="medium-12 cell" style="margin-left: 14px">
+            <label>
+                <span style="font-weight: bold">
+                    NUEVO SERVICIO -
+                </span>
+                <span style="color: #1779ba">
+                    {{ nuevoServicio.nombreEmpleado }} | {{ nuevoServicio.nombreEmpresa }}
+                </span>
+            </label>
+        </div>
+    </div>
     <div class="grid-x">
         <div class="medium-12 cell">
             <form>
-                <div id="formulario" class="grid-x">
+                <div id="formulario" class="grid-x grid-padding-y">
                     <div class="grid-x grid-padding-x medium-3 cell">
                         <div class="medium-12 cell">
-                            <label>NOMBRES
-                                <input type="text" [(ngModel)]="nuevoEmpleado.nombres" name="nit" placeholder="Digite el nit aqui">
+                            <label>FECHA
+                                <input type="date" id="fechaServicio" [(ngModel)]="nuevoServicio.date" name="date">
+                            </label>
+                        </div>
+                        <div class="medium-12 cell grid-x">
+                            <div class="medium-5 cell">
+                                <label>HORA
+                                    <input type="number" [(ngModel)]="nuevoServicio.hora" name="hora" placeholder="HORA">
+                                </label>
+                            </div>
+                            <div class="medium-2 cell">
+                                <label>&nbsp;
+                                </label>
+                                <div style="font-weight: bold;font-size: 24px;height: 38px;text-align: center;">:</div>
+                            </div>
+                            <div class="medium-5 cell">
+                                <label>MINUTOS
+                                    <input type="number" [(ngModel)]="nuevoServicio.minutos" name="minutos" placeholder="MINUTOS">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="medium-12 cell">
+                            <label>DURACION EN MINUTOS
+                                <input type="number" [(ngModel)]="nuevoServicio.duracion" name="duracion" placeholder="Digite la duracion aqui">
                             </label>
                         </div>
                         <div class="medium-12 cell">
-                            <label>NOMBRES
-                                <input type="text" [(ngModel)]="nuevoEmpleado.nombres" name="nit" placeholder="Digite el nit aqui">
+                            <label>ACTIVIDAD
+                                <input type="text" [(ngModel)]="nuevoServicio.actividad" name="act" placeholder="Digite el nombre aqui">
                             </label>
                         </div>
                         <div class="medium-12 cell">
-                            <label>APELLIDOS
-                                <input type="text" [(ngModel)]="nuevoEmpleado.apellidos" name="nombre" placeholder="Digite el nombre aqui">
-                            </label>
-                        </div>
-                        <div class="medium-12 cell">
-                            <label>NOMBRES
-                                <input type="text" [(ngModel)]="nuevoEmpleado.nombres" name="nit" placeholder="Digite el nit aqui">
+                            <label>OBSERVACION
+                                <input type="text" [(ngModel)]="nuevoServicio.observacion" name="obs" placeholder="Digite el nit aqui">
                             </label>
                         </div>
                     </div>
 
                     <div class="medium-9 cell">
                         <label>ELIJA LA UBICACION DEL SERVICIO AQUI</label>
-                        <app-gmap #mapServicios [name]="'servicesMap'" [height]="300"></app-gmap>
+                        <app-gmap #mapServicios [name]="'servicesMap'" [height]="360"></app-gmap>
                     </div>
 
                     <div class="medium-12 cell clearfix">
-                        <button class="alert button small float-right" (click)="limpiar()">Cancelar</button>
-                        <button class="button small float-right" (click)="Guardar()">Guardar</button>                        
+                        <button class="alert button small float-right" style="margin-left: 4px" (click)="CancelarAsignarServicio()">Cancelar</button>
+                        <button class="button small float-right" (click)="GuardarAsignacion()">Guardar</button>
                     </div>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="reveal large" id="ModalServicio" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
+    <div class="grid-x">
+        <div class="medium-12 cell" style="margin-left: 14px">
+            <label>
+                <span style="font-weight: bold">
+                    SERVICIOS -
+                </span>
+                <span style="color: #1779ba">
+                    {{ empleadoSeleccionado.nombreEmpleado }} | {{ empleadoSeleccionado.nombreEmpresa }}
+                </span>
+            </label>
+        </div>
+    </div>
+    <div class="grid-x">
+        <div class="medium-12 cell">
+            <form>
+                <div id="formulario" class="grid-x grid-padding-y">
+                    <div class="grid-x medium-12 cell">
+                        <div class="medium-7 cell grid-x grid-padding-x">
+                            <div class="medium-4 cell">
+                                <label>FECHA INICIAL
+                                    <input type="date" id="fechaServicio" [(ngModel)]="fecha_inicial" name="date">
+                                </label>
+                            </div>
+                            <div class="medium-4 cell">
+                                <label>FECHA FINAL
+                                    <input type="date" id="fechaServicio" [(ngModel)]="fecha_final" name="date">
+                                </label>
+                            </div>
+                            <div class="medium-2 cell clearfix">
+                                <label>&nbsp;</label>
+                                <button class="button float-left" (click)="cargarServicios()">Cargar</button>
+                            </div>
+                        </div>
+                        <div class="medium-5 cell clearfix ">
+                            <div class="medium-6 float-right">
+                                <label>&nbsp;</label>
+                                <input type="text" [(ngModel)]="FiltroServicios" name="filtro_servicio" placeholder="Buscar" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="medium-12 cell" style="height: 300px;max-height: 300px;overflow-y: scroll">
+            <table class="unstriped">
+                <tr>
+                    <th>Id</th>
+                    <th>fecha</th>
+                    <th style="text-align: center">Estado</th>
+                    <th style="text-align: center">Actividad</th>
+                    <th style="text-align: center">Observacion</th>
+                    <th style="text-align: center">Direccion</th>
+                </tr>
+
+                <tr *ngFor="let servicio of servicios | filtroServicio:FiltroServicios ">
+                    <td>{{ servicio.id }}</td>
+                    <td>{{ servicio.fecha | date:'EEEE, MMMM d, y, h:mm:ss a' }}</td>
+                    <td style="text-align: center">{{ servicio.estado }}</td>
+                    <td style="text-align: center">{{ servicio.actividad }}</td>
+                    <td style="text-align: center">{{ servicio.observacion }}</td>
+                    <td style="width: 150px">
+                        <div (click)="showLocationService(servicio)" style="text-align: center;color: #1779ba" class="button-cursor float-center medium-4">
+                            <i class="material-icons">location_on</i>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <div class="medium-12" style="height:40px">
+
         </div>
     </div>
 

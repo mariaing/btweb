@@ -7,5 +7,7 @@ export class Empleado {
     direccion: string;
     id_empresa: number;
     foto: string;
+    nombreEmpresa: string;
+    nombreEmpleado: string;
     constructor() { }
 }
