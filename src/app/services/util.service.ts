@@ -83,6 +83,25 @@ export class UtilService {
     return year + month + day;
   }
 
+  ParseEstadoServicio(estado: number) {
+    if (estado === 0) {
+      return 'En Espera';
+    }
+    if (estado === 1) {
+      return 'En Proceso';
+    }
+    if (estado === 2) {
+      return 'Cumplido';
+    }
+    if (estado === 3) {
+      return 'Cancelado';
+    }
+    if (estado === 4) {
+      return 'Vencido';
+    }
+    return 'Indefinido';
+  }
+
   getTime() {
     const fecha = new Date();
     let hora = fecha.getHours() + '';
@@ -103,7 +122,7 @@ export class UtilService {
       res.Data = data;
       res.IsOk = true;
       return res;
-    } catch(e) {
+    } catch (e) {
       const res = new Result<Date>();
       res.IsOk = false;
       return res;

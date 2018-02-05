@@ -241,6 +241,7 @@ export class EmpleadosComponent implements OnInit {
             if (m.observacion === null){
               m.observacion = 'ninguna';
             }
+            m.estadoTexto =  this.util.ParseEstadoServicio(m.estado);
             return m;
           });
         } else{

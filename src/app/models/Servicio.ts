@@ -12,25 +12,9 @@ export class Servicio {
     public observacion: string;
     public actividad: string;
     public estado: number;
+    public estadoTexto: string;
     public hora: number;
     public minutos: number;
-
-    public estadoTexto(): string {
-        switch (this.estado) {
-            case 0:
-                return 'En Espera';
-            case 1:
-                return 'En Proceso';
-            case 2:
-                return 'Cumplido';
-            case 3:
-                return 'Cancelado';
-            case 4:
-                return 'Vencido';
-            default:
-                return 'Indefinido';
-        }
-    }
 
     public IsValid() {
 

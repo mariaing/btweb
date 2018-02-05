@@ -263,7 +263,7 @@
                 <tr *ngFor="let servicio of servicios | filtroServicio:FiltroServicios ">
                     <td>{{ servicio.id }}</td>
                     <td>{{ servicio.fecha | date:'EEEE, MMMM d, y, h:mm:ss a' }}</td>
-                    <td style="text-align: center">{{ servicio.estado }}</td>
+                    <td style="text-align: center">{{ servicio.estadoTexto }}</td>
                     <td style="text-align: center">{{ servicio.actividad }}</td>
                     <td style="text-align: center">{{ servicio.observacion }}</td>
                     <td style="width: 150px">
