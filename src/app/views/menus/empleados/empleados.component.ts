@@ -84,6 +84,7 @@ export class EmpleadosComponent implements OnInit {
 
     this.emplSVC.getEmpleados().subscribe(s => {
       this.empleados = s;
+      console.log(s);
     });
   }
 

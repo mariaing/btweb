@@ -8,7 +8,11 @@ import { Result } from './../models/Result';
 @Injectable()
 export class UsuarioService {
 
-  constructor(private http: HttpClient, private util: UtilService, private auth: AuthService, private router: Router) { }
+  base = 'http://btproject.cerverodev.com/';
+
+  constructor(private http: HttpClient, private util: UtilService, private auth: AuthService, private router: Router) { this.base = ''; }
+
+  
 
   public setRoot(vcr: ViewContainerRef) {
     this.util.init(vcr);
@@ -16,7 +20,7 @@ export class UsuarioService {
 
   public loggin(username: string, password: string) {
     
-    this.http.post<Result<Usuario>>('api/usuarios/login/', {
+    this.http.post<Result<Usuario>>(this.base + 'api/usuarios/login/', {
       "Username": username,
       "Password": password
     }).subscribe(

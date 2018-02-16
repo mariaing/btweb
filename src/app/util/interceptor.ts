@@ -15,7 +15,7 @@ import { UtilService } from './../services/util.service';
 export class BTInterceptor implements HttpInterceptor {
   constructor(private auth: AuthService, private util : UtilService) { }
 
-  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {    
 
     const that = this;
 

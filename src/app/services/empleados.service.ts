@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Empleado } from './../models/Empleado';
 
 @Injectable()
-export class EmpleadosService {
+export class EmpleadosService {  
+  
 
   constructor(private http: HttpClient) { }
 

@@ -258,6 +258,8 @@
                     <th style="text-align: center">Actividad</th>
                     <th style="text-align: center">Observacion</th>
                     <th style="text-align: center">Direccion</th>
+                    <th style="text-align: center">Telefono</th>
+                    <th style="text-align: center">Bluetooth</th>
                 </tr>
 
                 <tr *ngFor="let servicio of servicios | filtroServicio:FiltroServicios ">
@@ -266,6 +268,9 @@
                     <td style="text-align: center">{{ servicio.estadoTexto }}</td>
                     <td style="text-align: center">{{ servicio.actividad }}</td>
                     <td style="text-align: center">{{ servicio.observacion }}</td>
+                    <td style="text-align: center">{{ servicio.actividad }}</td>
+                    <td style="text-align: center">{{ servicio.BateriaPhone }}</td>
+                    <td style="text-align: center">{{ servicio.BateriaBluetooth }}</td>
                     <td style="width: 150px">
                         <div (click)="showLocationService(servicio)" style="text-align: center;color: #1779ba" class="button-cursor float-center medium-4">
                             <i class="material-icons">location_on</i>
