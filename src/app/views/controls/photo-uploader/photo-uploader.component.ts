@@ -30,7 +30,7 @@ export class PhotoUploaderComponent implements OnInit {
       reader.onload = (function (theFile) {
         return function (e) {
           console.log(e);
-          that.showButton = false;          
+          that.showButton = false;
           that.selectedImage.nativeElement.src = e.target.result;
         };
       })(f);
@@ -49,7 +49,7 @@ export class PhotoUploaderComponent implements OnInit {
     this.selectedImage.nativeElement.src = uri;
   }
 
-  public ClearPhoto(){
+  public ClearPhoto() {
     this.showButton = true;
     this.selectedImage.nativeElement.src = '#';
   }

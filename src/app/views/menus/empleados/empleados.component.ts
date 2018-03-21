@@ -11,6 +11,9 @@ import { EmpleadosService } from './../../../services/empleados.service';
 import { Subject } from 'rxjs/Subject';
 import { Servicio } from '../../../models/Servicio';
 import { ServiciosService } from '../../../services/servicios.service';
+import { ModalHandler } from './../../../util/modalHandler';
+import { Cliente } from '../../../models/Cliente';
+import { ClientesService } from '../../../services/clientes.service';
 
 declare var $;
 declare var Foundation;
@@ -25,13 +28,18 @@ export class EmpleadosComponent implements OnInit {
 
   //#region componentes
 
+  @ViewChild('mapEmpleado') mapaEmpleado: GmapComponent;
   @ViewChild('mapServicios') mapaComponent: GmapComponent;
+  @ViewChild('mapEmpServicio') mapaEmpServicio: GmapComponent;
   @ViewChild('photo') photoComponent: PhotoUploaderComponent;
 
   //#endregion
 
+  nuevaMac = '';
+
   loading = new Subject<number>();
 
+  clientes: Cliente[];
   empresas: any = [];
   empleados: any = [];
   servicios: Array<Servicio>;
@@ -39,6 +47,7 @@ export class EmpleadosComponent implements OnInit {
   empleadoSeleccionado: Empleado = new Empleado();
   nuevoEmpleado: Empleado = new Empleado();
   nuevoServicio: Servicio = new Servicio();
+  SelectedService: Servicio;
 
   fecha_inicial: any;
   fecha_final: any;
@@ -47,6 +56,7 @@ export class EmpleadosComponent implements OnInit {
   filtro: string;
   FiltroEmpresaID = -1;
   FiltroServicios = '';
+
   // #region modals
 
   modalName = 'ModalNuevoEditar';
@@ -58,10 +68,17 @@ export class EmpleadosComponent implements OnInit {
   modalServiciosAsignadosName = 'ModalServicio';
   modalServiciosAsignadosID = '#ModalServicio';
 
+  modalSetMacName = 'ModalMac';
+  modalSetMacID = '#' + this.modalSetMacName;
+
+  mdl_position: ModalHandler;
+  mdl_photo: ModalHandler;
+  mdl_pos_svc: ModalHandler;
+
   // #endregion
 
   files: FileList;
-  rootImage = 'http://localhost:58979/';
+  rootImage = this.util.hostProd;
 
   EditMode = false;
 
@@ -71,8 +88,30 @@ export class EmpleadosComponent implements OnInit {
     private emplSVC: EmpleadosService,
     private mapSVC: MapService,
     private serviceSVC: ServiciosService,
-    public util: UtilService
+    public util: UtilService,
+    private cltSVC: ClientesService
     ) { }
+
+  InitClientes() {
+    this.cltSVC.GetClientes().subscribe((res: Result<Cliente[]>) => {
+      if (res.IsOk) {
+        this.clientes = res.Data;
+      } else {
+        this.util.showError(res.Mensaje);
+      }
+    });
+  }
+
+  GetEmpleados() {
+    this.emplSVC.getEmpleados().subscribe((s: Empleado[]) => {
+      this.empleados = s.map(
+        m => {
+          if (m.pulsera === undefined || m.pulsera === '' || m.pulsera === null) { m.pulsera = 'no registra'; }
+          return m;
+        }
+      );
+    });
+  }
 
   GetEmpresas() {
     const that = this;
@@ -81,37 +120,59 @@ export class EmpleadosComponent implements OnInit {
       this.nuevoEmpleado.id_empresa = this.empresas[0].id;
     });
 
-
-    this.emplSVC.getEmpleados().subscribe(s => {
-      this.empleados = s;
-      console.log(s);
-    });
-  }
-
-  onOpenModalServicio() {
-    const that = this;
-    return (modal) => {
-      that.mapaComponent.InitMap();
-      console.log('se inicializo correctamente');
-    };
+    that.GetEmpleados();
+    setInterval(() => {
+      that.GetEmpleados();
+    }, 1000 * 10);
   }
 
   ModalInit() {
     this.util.initModal(this.modalName);
-    this.util.initModal(this.modalServicesName, this.onOpenModalServicio());
+    this.util.initModal(this.modalServicesName, (modal) => { this.mapaComponent.InitMap(); });
     this.util.initModal(this.modalServiciosAsignadosName);
+    this.util.initModal(this.modalSetMacName);
+    this.mdl_photo = new ModalHandler('ModalPhoto');
+    this.mdl_position = new ModalHandler('ModalEmpleadoPosicion', (modal) => {
+      this.mapaEmpleado.InitMap();
+
+      const isValid = (this.empleadoSeleccionado.Latitud != null) && (this.empleadoSeleccionado.Longitud != null);
+
+      if (isValid) {
+        console.log('es valido');
+        const lat = this.empleadoSeleccionado.Latitud;
+        const lng = this.empleadoSeleccionado.Longitud;
+        this.mapaEmpleado.SetMarker(lat, lng);
+      } else {
+        console.log('no es valido');
+        this.util.showError('El empleado no reporta ubicacion');
+      }
+    });
+
+    this.mdl_pos_svc = new ModalHandler('ModalServicioPosicion', (modal) => {
+      this.mapaEmpServicio.InitMap();
+      const isValid = (this.SelectedService.latitud != null) && (this.SelectedService.longitud != null);
+
+      if (isValid) {
+        console.log('es valido');
+        const lat = this.SelectedService.latitud;
+        const lng = this.SelectedService.longitud;
+        this.mapaEmpServicio.SetMarker(lat, lng);
+      } else {
+        console.log('no es valido');
+        this.util.showError('El servicio no tiene una ubicacion valida');
+      }
+    });
   }
 
   ngOnInit() {
+    this.InitClientes();
     this.GetEmpresas();
     this.ModalInit();
   }
 
-
   AsignarServicio(emp: Empleado) {
+
     const time = this.util.getTime();
-    const empresaName = this.empSVC.getNameEmpresa(emp.id_empresa, this.empresas);
-    if (empresaName === null) { return; }
 
     this.nuevoServicio.estado = 0;
     this.nuevoServicio.hora = Number(time.split(':')[0]);
@@ -120,10 +181,14 @@ export class EmpleadosComponent implements OnInit {
     this.nuevoServicio.id_empleado = emp.id;
     this.nuevoServicio.id_empresa = emp.id_empresa;
     this.nuevoServicio.nombreEmpleado = emp.nombres.toUpperCase() + ' ' + emp.apellidos.toUpperCase();
+
     this.nuevoServicio.date = this.util.getActualDate();
+    const empresaName = this.empSVC.getNameEmpresa(emp.id_empresa, this.empresas);
+    if (empresaName === null) { return; }
     this.nuevoServicio.nombreEmpresa = empresaName;
 
     $(this.modalServicesID).foundation('open');
+
   }
 
   CancelarAsignarServicio() {
@@ -192,7 +257,6 @@ export class EmpleadosComponent implements OnInit {
     this.empleadoSeleccionado = emp;
     this.empleadoSeleccionado.nombreEmpleado = emp.nombres.toUpperCase() + ' ' + emp.apellidos.toUpperCase();
     this.empleadoSeleccionado.nombreEmpresa = this.empSVC.getNameEmpresa(emp.id_empresa, this.empresas);
-
     $(this.modalServiciosAsignadosID).foundation('open');
   }
 
@@ -228,29 +292,98 @@ export class EmpleadosComponent implements OnInit {
     });
   }
 
+  Eliminar() {
+    this.emplSVC.EliminarEmpleado(this.nuevoEmpleado.id)
+    .subscribe((s: Result<Empleado>) => {
+      if (s.IsOk) {
+        this.util.showSuccess('Empleado eliminado exitosamente');
+        this.GetEmpresas();
+        $(this.modalID).foundation('close');
+      }else {
+        this.util.showError(s.Mensaje);
+      }
+    });
+  }
+
   limpiar() {
     this.nuevoEmpleado = new Empleado();
     $(this.modalID).foundation('close');
   }
 
   cargarServicios() {
-    console.log(this.empleadoSeleccionado);
     this.serviceSVC.ObtenerServicios(this.empleadoSeleccionado.id, this.fecha_inicial, this.fecha_final)
       .subscribe((s: Result<Servicio[]>) => {
-        if (s.IsOk){
+        if (s.IsOk) {
           this.servicios = s.Data.map(m => {
-            if (m.observacion === null){
+            if (m.observacion === null) {
               m.observacion = 'ninguna';
             }
-            m.estadoTexto =  this.util.ParseEstadoServicio(m.estado);
+            m.estadoTexto = this.util.ParseEstadoServicio(m.estado);
             return m;
           });
-        } else{
+        } else {
           this.util.showWarning('no exiten servicios registrados en el intervalo de fecha establecido');
         }
       });
   }
 
-  showLocationService(servicio: Servicio){
+  showLocationService(servicio: Servicio) {
+  }
+
+  CambiarMac(emp) {
+    this.empleadoSeleccionado = emp;
+    this.empleadoSeleccionado.nombreEmpleado = emp.nombres.toUpperCase() + ' ' + emp.apellidos.toUpperCase();
+    this.empleadoSeleccionado.nombreEmpresa = this.empSVC.getNameEmpresa(emp.id_empresa, this.empresas);
+    $(this.modalSetMacID).foundation('open');
+  }
+
+  CancelarNuevaMac() {
+    $(this.modalSetMacID).foundation('close');
+  }
+
+  GuardarMac() {
+    if (this.nuevaMac.length < 17) {
+      this.util.showError('formato invalido');
+      return;
+    }
+
+    if (this.nuevaMac.split(':').length < 5) {
+      this.util.showError('formato invalido');
+      return;
+    }
+
+    this.emplSVC.SaveMac(this.empleadoSeleccionado.id, this.nuevaMac)
+      .subscribe(
+        (s: Result<Empleado>) => {
+          if (s.IsOk) {
+            this.util.showSuccess('Mac actualizada exitosamente');
+          } else {
+            this.util.showError(s.Mensaje);
+          }
+
+          $(this.modalSetMacName).foundation('close');
+        });
+
+  }
+
+  ShowPhoto(emp: Empleado) {
+    this.empleadoSeleccionado = emp;
+    this.empleadoSeleccionado.nombreEmpleado = emp.nombres.toUpperCase() + ' ' + emp.apellidos.toUpperCase();
+    this.mdl_photo.Show();
+  }
+
+  ShowPosition(emp: Empleado) {
+    this.empleadoSeleccionado = emp;
+    this.empleadoSeleccionado.nombreEmpleado = emp.nombres.toUpperCase() + ' ' + emp.apellidos.toUpperCase();
+    this.mdl_position.Show();
+  }
+
+  ShowPositionServices(svc: Servicio) {
+    this.SelectedService = svc;
+    this.mdl_pos_svc.Show();
+  }
+
+  SelectedCliente(value) {
+    this.nuevoServicio.cliente = value;
   }
 }

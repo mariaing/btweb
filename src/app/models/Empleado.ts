@@ -9,5 +9,8 @@ export class Empleado {
     foto: string;
     nombreEmpresa: string;
     nombreEmpleado: string;
+    pulsera: string;
+    Latitud: string;
+    Longitud: string;
     constructor() { }
 }

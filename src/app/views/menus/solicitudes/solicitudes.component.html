@@ -1,0 +1,61 @@
+<style>
+  td {
+    text-align: center;
+  }
+</style>
+<div class="grid-container">
+  <div class="grid-x">
+      <div class="medium-10">
+          <div class="grid-x grid-padding-x">              
+              <div class="medium-3 cell">
+                  <label>fecha inicial
+                      <input type="date" [(ngModel)]="fecha_inicio" placeholder="fecha inicial">
+                  </label>
+              </div>
+              <div class="medium-3 cell">
+                  <label>fecha final
+                      <input type="date" [(ngModel)]="fecha_final" placeholder="fecha final">
+                  </label>
+              </div>
+              <div class="medium-3 cell">
+                  <a style="margin-top: 24px" (click)="getSolicitudes()" class="button">cargar</a>
+              </div>
+          </div>
+      </div>
+
+      <div *ngIf="solicitudes.length > 0" class="grid-x medium-12" style="max-height: 420px;overflow-y: scroll">
+          <div class="medium-12">
+              <table class="unstriped">
+                  <tr>
+                      <th>Id</th>
+                      <th>fecha</th>
+                      <th>id servicio</th>
+                      <th>identificacion</th>
+                      <th>empleado</th>
+                      <th>motivo</th>                      
+                      <th>acciones</th>
+                  </tr>
+
+                  <tr *ngFor="let solicitud of solicitudes ">
+                      <td>{{ solicitud.id }}</td>
+                      <td>{{ solicitud.fecha | date:'dd/MM/y, H:mm:ss' }}</td>
+                      <td>{{ solicitud.id_servicio }}</td>
+                      <td>{{ solicitud.identificacion_empleado }}</td>
+                      <td>{{ solicitud.nombre_empleado }}</td>
+                      <td style="text-align: center">{{ solicitud.peticion }}</td>
+                      <td>
+                          <div class="grid-x" style="color: #1779ba">
+                              <div *ngIf="solicitud.estado === 0 || solicitud.estado === 1" (click)="AceptarReanudacion(solicitud)" class="button-cursor float-center medium-4">
+                                  <i class="material-icons">done</i>
+                              </div>
+                              <div *ngIf="solicitud.estado === 0 || solicitud.estado === 2" (click)="NegarReanudacion(solicitud)" class="button-cursor float-center medium-4">
+                                  <i class="material-icons">cancel</i>
+                              </div>
+                          </div>
+                      </td>
+                  </tr>
+              </table>
+          </div>
+      </div>
+  </div>
+</div>

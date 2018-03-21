@@ -7,8 +7,8 @@
         </div>
         <ul class="vertical menu icons icon-left align-center" style="font-size: 13px">
             <li *ngFor="let item of menus">
-                <a routerLink="{{ item.link }}">
-                    <i class="fi-list"></i>
+                <a routerLink="{{ item.link }}">                    
+                    <i style="font-size: 14px" class="material-icons">{{ item.icon }}</i>
                     <span style="font-weight: bold">{{ item.texto }}</span>
                 </a>
             </li>
@@ -20,14 +20,8 @@
                 <ul class="dropdown menu" data-dropdown-menu>
                     <li class="menu-text">{{ util.appState }}</li>
                     <li>
-                        <a href="#">ONE</a>
-                    </li>
-                    <li>
-                        <a href="#">TWO</a>
-                    </li>
-                    <li>
-                        <a href="#">THREE</a>
-                    </li>
+                        <a href="#"></a>
+                    </li>                    
                 </ul>
             </div>
             <div class="top-bar-right">

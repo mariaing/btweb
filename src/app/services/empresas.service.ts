@@ -1,22 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Empresa } from './../models/Empresa';
+import { UtilService } from './util.service';
 
 @Injectable()
 export class EmpresasService {
     
-  constructor(private http: HttpClient) {  }
+  constructor(private http: HttpClient, private util: UtilService) {  }
 
   all() {
-    return this.http.get('api/empresas');
+    return this.http.get(this.util.hostProd + 'api/empresas');
   }
 
   guardar(emp: Empresa){    
-    return this.http.post('api/empresas/',emp);
+    return this.http.post(this.util.hostProd + 'api/empresas/',emp);
   }
 
   editar(emp: Empresa) {
-    return this.http.post(  'api/empresas/update/' + emp.id, emp);
+    return this.http.post(this.util.hostProd + 'api/empresas/update/' + emp.id, emp);
   }
 
 

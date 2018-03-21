@@ -34,6 +34,10 @@ import { FiltroEmpleadoPipe } from './pipes/filtro-empleado.pipe';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { FiltroServicioPipe } from './pipes/filtro-servicio.pipe';
+import { ClientesComponent } from './views/menus/clientes/clientes.component';
+import { ClientesService } from './services/clientes.service';
+import { FiltroClientePipe } from './pipes/filtro-cliente.pipe';
+import { SolicitudesComponent } from './views/menus/solicitudes/solicitudes.component';
 /*
 ############################################################
 ##                        route
@@ -52,7 +56,9 @@ const appRoutes: Routes = [
       { path: 'empresas', component: EmpresasComponent },
       { path: 'empleados', component: EmpleadosComponent },
       { path: 'asignacion', component: AsignacionComponent },
-      { path: 'consultas', component: ConsultasComponent }
+      { path: 'consultas', component: ConsultasComponent },
+      { path: 'clientes', component: ClientesComponent },
+      { path: 'reanudaciones', component: SolicitudesComponent }
     ]
   }
 
@@ -72,10 +78,13 @@ const appRoutes: Routes = [
     LoadingComponent,
     PhotoUploaderComponent,
     FiltroEmpleadoPipe,
-    FiltroServicioPipe
+    FiltroServicioPipe,
+    ClientesComponent,
+    FiltroClientePipe,
+    SolicitudesComponent
   ],
   imports: [
-HttpClientModule,
+    HttpClientModule,
     HttpModule,
     BrowserModule,
     FormsModule,
@@ -94,7 +103,8 @@ HttpClientModule,
     EmpresasService,
     EmpleadosService,
     MapService,
-    ServiciosService
+    ServiciosService,
+    ClientesService
   ],
   bootstrap: [AppComponent]
 })

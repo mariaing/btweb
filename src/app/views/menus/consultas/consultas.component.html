@@ -1,3 +1,173 @@
-<p>
-  consultas works!
-</p>
+<div class="grid-container">
+    <div class="grid-x">
+        <div class="medium-10">
+            <div class="grid-x grid-padding-x">
+                <div class="medium-3 cell">
+                    <label>identificacion
+                        <input type="text" [(ngModel)]="cedula" placeholder="documento aqui">
+                    </label>
+                </div>
+                <div class="medium-3 cell">
+                    <label>fecha inicial
+                        <input type="date" [(ngModel)]="fecha_inicio" placeholder="filtro">
+                    </label>
+                </div>
+                <div class="medium-3 cell">
+                    <label>fecha final
+                        <input type="date" [(ngModel)]="fecha_final" placeholder="filtro">
+                    </label>
+                </div>
+                <div class="medium-3 cell">
+                    <a style="margin-top: 24px" (click)="getServicios()" class="button">buscar</a>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="resultado_servicios.length > 0" class="grid-x medium-12" style="max-height: 420px;overflow-y: scroll">
+            <div class="medium-12">
+                <table class="unstriped">
+                    <tr>
+                        <th>Id</th>
+                        <th>fecha</th>
+                        <th>cliente</th>
+                        <th>actividad</th>
+                        <th>duracion aprobada</th>
+                        <th>duracion</th>
+                        <th>estado</th>
+                        <th style="text-align: center">Posicion</th>
+                        <th style="text-align: center">Acciones</th>
+                    </tr>
+
+                    <tr *ngFor="let servicio of resultado_servicios ">
+                        <td>{{ servicio.id }}</td>
+                        <td>{{ servicio.fecha | date:'dd/MM/y, H:mm:ss' }}</td>
+                        <td>{{ servicio.cliente }}</td>
+                        <td style="text-align: center">{{ servicio.actividad }}</td>
+                        <td style="text-align: center">{{ servicio.duracion_aprobada + " mins - " + servicio.porcentaje }}</td>
+                        <td style="text-align: center">{{ servicio.duracion + " minutos" }}</td>
+                        <td style="text-align: center">{{ servicio.estadoTexto }}</td>
+                        <td style="text-align: center;">
+                            <div class="grid-x" style="color: #1779ba">
+                                <div (click)="ShowPosition(servicio)" class="button-cursor float-center medium-4">
+                                    <i class="material-icons">add_location</i>
+                                </div>
+                            </div>
+                        </td>
+                        <td style="text-align: center;">
+                            <div class="grid-x" style="color: #1779ba">
+                                <div title="historial" (click)="ShowDetalles(servicio)" class="button-cursor float-center medium-4">
+                                    <i class="material-icons">history</i>
+                                </div>
+                                <div title="eliminar" (click)="EliminarServicio(servicio)" class="button-cursor float-center medium-4">
+                                    <i class="material-icons">close</i>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="reveal" id="ModalServicioPosicion" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
+    <div class="grid-x">
+        <div class="medium-12 cell" style="margin-left: 14px">
+            <label>
+                <span style="font-weight: bold">
+                    UBICACION DE SERVICIO
+                </span>
+            </label>
+        </div>
+    </div>
+    <div class="grid-x">
+        <div class="medium-12 cell">
+            <div class="medium-9 cell">
+                <app-gmap #mapServicios [name]="'servicesMap'" [height]="360"></app-gmap>
+            </div>
+        </div>
+    </div>
+
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="reveal large" style="min-height: 300px" id="ModalServicioDetalles" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
+    <div class="grid-x">
+        <div class="medium-12 cell" style="margin-left: 14px">
+            <label>
+                <span style="font-weight: bold">
+                    DETALLES DE SERVICIO
+                </span>
+            </label>
+        </div>
+    </div>
+    <div class="grid-x">
+        <div class="medium-10 cell">
+            <table class="unstriped">
+                <tr>
+                    <th>Id</th>
+                    <th>fecha inicio</th>
+                    <th>fecha final</th>
+                    <th>minutos</th>
+                    <th>estado</th>
+                    <th>Motivo</th>
+                    <th style="text-align: center">Foto</th>
+                    <th style="text-align: center">Acciones</th>
+                </tr>
+
+                <tr *ngFor="let intervalo of intervalos " (click)="ShowPhoto(intervalo)">
+                    <td>{{ intervalo.id }}</td>
+                    <td style="width: 200px;text-align: center">{{ intervalo.fecha_inicio | date:'dd/MM/y, H:mm:ss' }}</td>
+                    <td style="width: 200px;text-align: center">{{ intervalo.fecha_final | date:'dd/MM/y, H:mm:ss' }}</td>
+                    <td>{{ intervalo.minutos + " minutos" }}</td>
+                    <td style="width: 100px;text-align: center">{{ intervalo.estadoTexto }}</td>
+                    <td style="text-align: center">{{ intervalo.motivo }}</td>
+                    <td style="text-align: center">
+                        <img height="24" width="24" src="{{ util.hostProd + intervalo.ruta_icon }}" />
+                    </td>
+                    <td style="text-align: center;width: 80px">
+                        <div class="grid-x" style="color: #1779ba">
+                            <div *ngIf="intervalo.estado === 0 || intervalo.estado === 1" (click)="AceptarIntervalo(intervalo)" class="button-cursor float-center medium-4">
+                                <i class="material-icons">done</i>
+                            </div>
+                            <div *ngIf="intervalo.estado === 0 || intervalo.estado === 2" (click)="NegarIntervalo(intervalo)" class="button-cursor float-center medium-4">
+                                <i class="material-icons">cancel</i>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <div class="medium-2 cell grid-x" style="border-left: 1px grey solid;">
+            <div style="max-height: 350px;min-height: 350px" *ngIf="intervalo_actual !== undefined" class="medium-8 cell medium-offset-2">
+                <img class="float-center" src="{{ util.hostProd + intervalo_actual.ruta_icon }}" />
+                <p class="text-center">
+                    ID: {{ intervalo_actual.id }}
+                </p>
+            </div>
+            <div style="max-height: 350px;min-height: 350px" *ngIf="intervalo_actual === undefined" class="medium-8 cell medium-offset-2">
+                <p class="text-center" style="margin-top: 150px">
+                    Haga click sobre una fila para apliar la imagen
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="grid-x ">
+        <div class="medium-6 cell">
+            <span>Total Minutos: </span> {{ total_minutos }}
+        </div>
+
+        <div class="medium-6 cell clearfix">
+            <button class="alert button small float-right" style="margin-left: 10px" (click)="CancelarServicio()">Cancelar</button>
+            <button class="button small float-right" style="margin-left: 10px" (click)="PagarServicio()">Pagar</button>
+            <button class="secondary button small float-right" style="margin-left: 10px" (click)="ReanudarServicio()">Reanudar</button>
+        </div>
+    </div>
+    <button class="close-button" data-close aria-label="Close modal" type="button">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>

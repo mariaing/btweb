@@ -13,6 +13,9 @@ export class UtilService {
 
   constructor(public toastr: ToastsManager) { }
 
+  public host = '';
+  public hostProd = 'http://btproject.cerverodev.com/';
+
   public appState: string;
   public filtro: string;
   public loading = false;
@@ -78,9 +81,23 @@ export class UtilService {
     let day = fecha.getDate() + '';
 
     if (fecha.getMonth() < 10) { month = '0' + month; }
-    if (fecha.getDay() < 10) { day = '0' + day; }
+    if (fecha.getDate() < 10) { day = '0' + day; }
 
     return year + month + day;
+  }
+
+  ParseEstadoIntervalo(estado: number) {
+    if (estado === 0) {
+      return 'Pendiente';
+    }
+    if (estado === 1) {
+      return 'Aprobado';
+    }
+    if (estado === 2) {
+      return 'Negado';
+    }
+
+    return 'Indefinido';
   }
 
   ParseEstadoServicio(estado: number) {
@@ -91,14 +108,21 @@ export class UtilService {
       return 'En Proceso';
     }
     if (estado === 2) {
-      return 'Cumplido';
+      return 'Cumplido 1/2';
     }
     if (estado === 3) {
-      return 'Cancelado';
+      return 'Cumplido';
     }
     if (estado === 4) {
       return 'Vencido';
     }
+    if (estado === 5) {
+      return 'Pagado';
+    }
+    if (estado === 6) {
+      return 'Cancelado';
+    }
+
     return 'Indefinido';
   }
 

@@ -9,14 +9,22 @@ export class Servicio {
     public fecha: Date;
     public date: any;
     public duracion: number;
+    public duracion_aprobada: number;
     public observacion: string;
     public actividad: string;
     public estado: number;
     public estadoTexto: string;
     public hora: number;
     public minutos: number;
+    public cliente: string;
+    public porcentaje: string;
+    public direccion: string;
 
     public IsValid() {
+
+        if (this.cliente === undefined) {
+            return { response: false, mensaje: 'Debe definir un nombre de cliente' };
+        }
 
         if (this.actividad === undefined) {
             return { response: false, mensaje: 'Debe definir una actividad' };

@@ -6,21 +6,18 @@ import { Router } from '@angular/router';
 import { Result } from './../models/Result';
 
 @Injectable()
-export class UsuarioService {
+export class UsuarioService {  
 
-  base = 'http://btproject.cerverodev.com/';
-
-  constructor(private http: HttpClient, private util: UtilService, private auth: AuthService, private router: Router) { this.base = ''; }
-
-  
+  constructor(private http: HttpClient, private util: UtilService, private auth: AuthService, private router: Router) { }  
 
   public setRoot(vcr: ViewContainerRef) {
     this.util.init(vcr);
   }
 
   public loggin(username: string, password: string) {
-    
-    this.http.post<Result<Usuario>>(this.base + 'api/usuarios/login/', {
+    let uri = this.util.hostProd + 'api/usuarios/login/';
+
+    this.http.post<Result<Usuario>>(uri, {
       "Username": username,
       "Password": password
     }).subscribe(

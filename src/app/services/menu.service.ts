@@ -12,12 +12,13 @@ export class MenuService {
   getSideMenu(rol: number) {
     const menus: Array<SideMenu> = [];
     if (this.auth.ObtenerUsuario().Rol === 0) {
-      const item = new SideMenu('EMPRESAS', '/dashboard/empresas');
+      const item = new SideMenu('EMPRESAS', '/dashboard/empresas', 'business');
       menus.push(item);
     }
-    menus.push(new SideMenu('EMPLEADOS', '/dashboard/empleados'));
-    menus.push(new SideMenu('SERVICIOS ', '/dashboard/asignacion'));
-    menus.push(new SideMenu('CONSULTAS', '/dashboard/consultas'));
+    menus.push(new SideMenu('EMPLEADOS', '/dashboard/empleados', 'card_travel'));
+    menus.push(new SideMenu('CONSULTAS', '/dashboard/consultas', 'find_in_page'));
+    menus.push(new SideMenu('CLIENTES', '/dashboard/clientes', 'account_circle'));
+    menus.push(new SideMenu('REANUDAR', '/dashboard/reanudaciones', 'assignment_turned_in'));
     return menus;
   }
 }

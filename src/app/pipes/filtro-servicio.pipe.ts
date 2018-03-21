@@ -11,7 +11,7 @@ export class FiltroServicioPipe implements PipeTransform {
 
   }
 
-  transform(items: Servicio[], filtro?: string): any {    
+  transform(items: Servicio[], filtro?: string): any {
     if (!items || !filtro) { return items; }
     return items.filter(
       item => {

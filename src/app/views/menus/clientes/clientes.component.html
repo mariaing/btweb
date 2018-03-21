@@ -1,0 +1,98 @@
+<style>
+    td {
+        text-align: center
+    }
+
+</style>
+
+<div class="grid-x">
+    <div class="medium-3">
+        <p>
+            <button (click)="showNuevoCliente()" class="button" data-open="newEmpresaModal">Nuevo Cliente</button>
+        </p>
+    </div>
+</div>
+<!--  -->
+<div class="grid-x" style="max-height: 460px;overflow-y: scroll">
+    <div class="medium-12">
+        <table class="unstriped">
+            <tr>
+                <th>Identificicacion</th>
+                <th>Nombres</th>
+                <th>Apellidos</th>
+                <th>Direccion</th>
+                <th>Telefono</th>
+                <th>Correo</th>
+                <th>Acciones</th>
+            </tr>
+
+            <tr *ngFor="let cliente of clientes | filtroCliente:util.filtro">
+                <td>{{ cliente.identificacion }}</td>
+                <td>{{ cliente.nombre }}</td>
+                <td>{{ cliente.apellido }}</td>
+                <td>{{ cliente.direccion }}</td>
+                <td>{{ cliente.telefono }}</td>
+                <td>{{ cliente.correo }}</td>
+                <td style="text-align: center">
+                    <div class="grid-x">                        
+                        <div (click)="showUpdateCliente(cliente)" class="button-cursor float-center medium-6">
+                            <i class="material-icons">mode_edit</i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="reveal" id="ModalNuevoCliente" data-reveal data-animation-in="fade-in" data-animation-out="fade-out">
+    <h3 style="margin-left: 12px">Cliente</h3>
+
+    <div class="grid-x">
+        <div class="medium-6 cell grid-padding-x">
+            <div class="medium-12 cell">
+                <label>IDENTIFICACION
+                    <input type="text" [disabled]="EditorMode" [(ngModel)]="nuevoCliente.identificacion" name="identificacion" placeholder="Digite la identificacion aqui">
+                </label>
+            </div>
+            <div class="medium-12 cell">
+                <label>NOMBRE
+                    <input type="text" [(ngModel)]="nuevoCliente.nombre" name="nombre" placeholder="Digite el nombre aqui">
+                </label>
+            </div>
+            <div class="medium-12 cell">
+                <label>APELLIDO
+                    <input type="text" [(ngModel)]="nuevoCliente.apellido" name="apellido" placeholder="Digite el apellido aqui">
+                </label>
+            </div>
+        </div>
+
+        <div class="medium-6 cell grid-padding-x">
+            <div class="medium-12 cell">
+                <label>DIRECCION
+                    <input type="text" [(ngModel)]="nuevoCliente.direccion" name="direccion" placeholder="Digite el direccion aqui">
+                </label>
+            </div>
+            <div class="medium-12 cell">
+                <label>TELEFONO
+                    <input type="text" [(ngModel)]="nuevoCliente.telefono" name="telefono" placeholder="Digite la telefono aqui">
+                </label>
+            </div>
+            <div class="medium-12 cell">
+                <label>CORREO
+                    <input type="text" [(ngModel)]="nuevoCliente.correo" name="correo" placeholder="Digite el correo aqui">
+                </label>
+            </div>
+        </div>
+
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            <span aria-hidden="true">&times;</span>
+        </button>
+
+        <div class="medium-12 cell clearfix" style="padding-top: 8px;">
+            <button style="margin : 0px 5px" class="alert button small float-right" (click)="limpiar()">Cancelar</button>
+            <button *ngIf="!EditorMode" class="button small float-right" (click)="Guardar()">Guardar</button>            
+            <button *ngIf="EditorMode" class="button small float-right" (click)="Actualizar()">Actualizar</button>
+        </div>
+
+    </div>
